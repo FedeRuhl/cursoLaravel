@@ -16,7 +16,7 @@
     </a>
     </li>
     <li class="nav-item">
-    <a class="nav-link" href="./examples/profile.html">
+    <a class="nav-link" href="{{ action('HomeController@index') }}"> <!-- acá estaba probando el helper action -->
         <i class="ni ni-satisfied text-success"></i> Pacientes
     </a>
     </li>
