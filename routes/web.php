@@ -21,3 +21,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+// Specialty
+Route::get('/specialties', 'SpecialtyController@index')->name('specialties');
+Route::get('/specialties/create', 'SpecialtyController@create')->name('specialties.create'); //form registro
+Route::get('/specialties/{specialty?}/edit', 'SpecialtyController@edit')->name('specialties.edit');
+Route::post('/specialties', 'SpecialtyController@store'); //envío del form a la db
