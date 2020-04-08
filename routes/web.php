@@ -24,5 +24,23 @@ Route::get('/home', 'HomeController@index')->name('home');
 // Specialty
 Route::get('/specialties', 'SpecialtyController@index')->name('specialties');
 Route::get('/specialties/create', 'SpecialtyController@create')->name('specialties.create'); //form registro
-Route::get('/specialties/{specialty?}/edit', 'SpecialtyController@edit')->name('specialties.edit');
-Route::post('/specialties', 'SpecialtyController@store'); //envío del form a la db
+Route::get('/specialties/{specialty}/edit', 'SpecialtyController@edit')->name('specialties.edit');
+
+Route::post('/specialties', 'SpecialtyController@store')->name('specialties.store'); //envío del form a la db
+Route::put('/specialties/{specialty}', 'SpecialtyController@update')->name('specialties.update'); //edicion de especialidad
+Route::delete('/specialties/{specialty}', 'SpecialtyController@destroy')->name('specialties.destroy');
+
+// Doctors
+//hace las rutas de arriba automáticamente
+Route::resource('doctors', 'DoctorController')->names([
+    'index' => 'doctors',
+    'create' => 'doctors.create',
+    'store' => 'doctors.store',
+    'edit' => 'doctors.edit',
+    'update' => 'doctors.update',
+    'destroy' => 'doctors.destroy'
+
+]);
+//en consola escribimos php artisan make:controller NameController --resource
+
+// Patients

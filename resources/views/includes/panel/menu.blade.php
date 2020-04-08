@@ -1,22 +1,22 @@
 <h6 class="navbar-heading text-muted">Gestión de datos</h6>
 <ul class="navbar-nav">
     <li class="nav-item">
-    <a class="nav-link" href="./index.html">
+    <a class="nav-link" href="{{ route('home') }}"">
         <i class="ni ni-tv-2 text-primary"></i> Dashboard
     </a>
     </li>
     <li class="nav-item">
-    <a class="nav-link" href="./examples/icons.html">
+    <a class="nav-link" href="{{ route('specialties') }}">
         <i class="ni ni-bullet-list-67 text-info"></i> Especialidades
     </a>
     </li>
     <li class="nav-item">
-    <a class="nav-link" href="./examples/maps.html">
+    <a class="nav-link" href="{{ route('doctors') }}">
         <i class="ni ni-briefcase-24 text-orange"></i> Medicos
     </a>
     </li>
     <li class="nav-item">
-    <a class="nav-link" href="{{ action('HomeController@index') }}"> <!-- acá estaba probando el helper action -->
+    <a class="nav-link" href="/patients"> <!-- acá estaba probando el helper action -->
         <i class="ni ni-satisfied text-success"></i> Pacientes
     </a>
     </li>
@@ -36,12 +36,12 @@
     <!-- Navigation -->
 <ul class="navbar-nav mb-md-3">
     <li class="nav-item">
-    <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/getting-started/overview.html">
+    <a class="nav-link" href="#">
         <i class="ni ni-chart-bar-32 text-default"></i> Frecuencia de citas
     </a>
     </li>
     <li class="nav-item">
-    <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/foundation/colors.html">
+    <a class="nav-link" href="#">
         <i class="ni ni-diamond text-warning"></i> Médicos más activos
     </a>
     </li>
