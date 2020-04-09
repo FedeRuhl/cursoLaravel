@@ -44,3 +44,12 @@ Route::resource('doctors', 'DoctorController')->names([
 //en consola escribimos php artisan make:controller NameController --resource
 
 // Patients
+Route::resource('patients', 'PatientController')->names([
+    'index' => 'patients',
+    'create' => 'patients.create',
+    'store' => 'patients.store',
+    'edit' => 'patients.edit',
+    'update' => 'patients.update',
+    'destroy' => 'patients.destroy'
+
+]);
