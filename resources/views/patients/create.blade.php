@@ -49,7 +49,12 @@
 
             <div class="form-group">
                 <label for="phone"> Teléfono </label>
-                <input type="text" name="phone" class="form-control"  value="{{ old('phone') }}">
+                <input type="text" name="phone" class="form-control"  value="{{ old('phone') }}"> 
+            </div>
+
+            <div class="form-group">
+                <label for="password"> Contraseña </label>
+                <input type="text" name="password" class="form-control"  value="{{ Str::random(6) }}">
             </div>
 
             <button type="submit" class="btn btn-primary">

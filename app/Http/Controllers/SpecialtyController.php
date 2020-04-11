@@ -46,7 +46,7 @@ class SpecialtyController extends Controller
 
     public function edit(Specialty $specialty){
 
-        return view('specialties.edit', compact('specialty')); //raro
+        return view('specialties.edit', compact('specialty'));
     }
 
     public function update(Request $request, Specialty $specialty){

@@ -57,6 +57,9 @@
     </tbody>
     </table>
     </div>
+    <div class="pagination justify-content-center">
+        {{ $patients->links() }}
+    </div>
 </div>
 
 @endsection

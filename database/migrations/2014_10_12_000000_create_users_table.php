@@ -20,8 +20,8 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('address')->nulleable();
-            $table->string('phone')->nulleable();
+            $table->string('address')->nullable();
+            $table->string('phone')->nullable();
             $table->string('dni');
 
             $table->string('role'); //admin, patient, doctor
