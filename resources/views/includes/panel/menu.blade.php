@@ -1,5 +1,12 @@
-<h6 class="navbar-heading text-muted">Gestión de datos</h6>
+<h6 class="navbar-heading text-muted">
+    @if (auth()->user()->role == 'admin')
+    Gestión de datos
+    @else
+    Menú
+    @endif
+</h6>
 <ul class="navbar-nav">
+    @if (auth()->user()->role == 'admin')
     <li class="nav-item">
     <a class="nav-link" href="{{ route('home') }}"">
         <i class="ni ni-tv-2 text-primary"></i> Dashboard
@@ -16,10 +23,39 @@
     </a>
     </li>
     <li class="nav-item">
-    <a class="nav-link" href="/patients"> <!-- acá estaba probando el helper action -->
+    <a class="nav-link" href="{{ route('patients') }}">
         <i class="ni ni-satisfied text-success"></i> Pacientes
     </a>
     </li>
+    @elseif (auth()->user()->role == 'doctor')
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('home') }}"">
+            <i class="ni ni-calendar-grid-58 text-primary"></i> Gestionar horario
+        </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('patients') }}">
+                <i class="ni ni-satisfied text-success"></i> Mis pacientes
+        </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('specialties') }}">
+                <i class="ni ni-time-alarm text-info"></i> Mis citas
+        </a>
+        </li>
+    @else {{--patient--}}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('home') }}"">
+            <i class="ni ni-calendar-grid-58 text-primary"></i> Reservar turno
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('specialties') }}">
+            <i class="ni ni-time-alarm text-info"></i> Mis citas
+    </a>
+    </li>
+
+    @endif
     <li class="nav-item">
     <a class="nav-link" href="" onclick="event.preventDefault(); document.getElementById('formLogout').submit();">
         <i class="ni ni-button-power text-danger"></i> Cerrar sesión
@@ -29,6 +65,7 @@
     </form>
     </li>
 </ul>
+@if (auth()->user()->role == 'admin')
      <!-- Divider -->
     <hr class="my-3">
     <!-- Heading -->
@@ -46,5 +83,6 @@
     </a>
     </li>
 </ul>
+@endif
 
 
