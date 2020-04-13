@@ -56,4 +56,9 @@ Route::middleware(['auth', 'admin'])->namespace('Admin')->group(function(){ //en
     ]);
 });
 
+Route::middleware(['auth', 'doctor'])->namespace('Doctor')->group(function(){
+    Route::get('/schedule', 'ScheduleController@edit')->name('schedule.edit');
+    //en consola escribimos php artisan make:controller Doctor\ScheduleController
+});
+
 
