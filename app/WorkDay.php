@@ -17,4 +17,8 @@ class WorkDay extends Model
         'afternoonEnd',
         'doctorId'
     ];
+
+    public function scopeDoctor($query){
+        return $query->where('doctorId', auth()->user()->id);
+    }
 }
