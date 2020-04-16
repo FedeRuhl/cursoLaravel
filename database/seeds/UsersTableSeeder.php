@@ -25,6 +25,30 @@ class UsersTableSeeder extends Seeder
             'phone' => $faker->e164PhoneNumber,
             'role' => 'admin'
         ]);
+
+        User::create([
+            'name' => 'Medico',
+            'email' => 'medico@medico.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('medico'), // password
+            'remember_token' => Str::random(10),
+            'dni' => $faker->randomNumber(8, true),
+            'address' => $faker->address,
+            'phone' => $faker->e164PhoneNumber,
+            'role' => 'doctor'
+        ]);
+
+        User::create([
+            'name' => 'Paciente',
+            'email' => 'paciente@paciente.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('paciente'), // password
+            'remember_token' => Str::random(10),
+            'dni' => $faker->randomNumber(8, true),
+            'address' => $faker->address,
+            'phone' => $faker->e164PhoneNumber,
+            'role' => 'patient'
+        ]);
         //esto se define en el modelo UserFactory
         factory(User::class, 50)->create();
     }

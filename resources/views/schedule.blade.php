@@ -23,6 +23,17 @@
         </div>
         @endif
 
+        @if (session('errors'))
+        <div class="alert alert-danger" role=alert>
+            Los cambios se han guardado pero debe tener en cuenta que:
+            <ul>
+                @foreach(session('errors') as $error)
+                <li> {{$error}} </li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
         <div class="table-responsive">
             <!-- Specialties -->
         <table class="table align-items-center table-flush">
@@ -59,23 +70,23 @@
                     <div class="col">
                         <select name="morningStart[]" class="form-control" value="1">
                             <option selected="true" >Hora inicio</option> {{-- lo ideal seria ponerle disabled --}}
-                            @for ($i=5; $i<=12; $i++)
-                            <option value="{{ $i }}:00"
-                            @if(!empty($diasTrabajo[$key]) && $i.':00' == $diasTrabajo[$key]->morningStart) selected @endif> {{ $i }}:00 </option>
-                            <option value="{{ $i }}:30"
-                            @if(!empty($diasTrabajo[$key]) && $i.':30' == $diasTrabajo[$key]->morningStart) selected @endif> {{ $i }}:30 </option>
-                            @endfor
+                            @foreach ($morningHours as $morningHour)
+                            <option value="{{ $morningHour }}"
+                            @if(!empty($diasTrabajo[$key]) && $morningHour == $diasTrabajo[$key]->morningStart) selected @endif>
+                                {{$morningHour}} 
+                            </option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="col">
                         <select name="morningEnd[]" class="form-control">
                             <option selected="true" >Hora fin</option>
-                            @for ($i=5; $i<=12; $i++)
-                            <option value="{{ $i }}:00"
-                            @if(!empty($diasTrabajo[$key]) && $i.':00' == $diasTrabajo[$key]->morningEnd) selected @endif> {{ $i }}:00 </option>
-                            <option value="{{ $i }}:30"
-                            @if(!empty($diasTrabajo[$key]) && $i.':30' == $diasTrabajo[$key]->morningEnd) selected @endif> {{ $i }}:30 </option>
-                            @endfor
+                            @foreach($morningHours as $morningHour)
+                            <option value="{{ $morningHour }}"
+                            @if(!empty($diasTrabajo[$key]) && $morningHour == $diasTrabajo[$key]->morningEnd) selected @endif>
+                                {{$morningHour}} 
+                            </option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -85,23 +96,23 @@
                     <div class="col">
                         <select name="afternoonStart[]" class="form-control">
                             <option selected="true" >Hora inicio</option>
-                            @for ($i=13; $i<=23; $i++)
-                            <option value="{{ $i }}:00"
-                            @if(!empty($diasTrabajo[$key]) && $i.':00' == $diasTrabajo[$key]->afternoonStart) selected @endif> {{ $i }}:00 </option>
-                            <option value="{{ $i }}:30"
-                            @if(!empty($diasTrabajo[$key]) && $i.':30' == $diasTrabajo[$key]->afternoonStart) selected @endif> {{ $i }}:30 </option>
-                            @endfor
+                            @foreach($afternoonHours as $afternoonHour)
+                            <option value="{{ $afternoonHour }}"
+                            @if(!empty($diasTrabajo[$key]) && $afternoonHour == $diasTrabajo[$key]->afternoonStart) selected @endif>
+                                {{$afternoonHour}} 
+                            </option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="col">
                         <select name="afternoonEnd[]" class="form-control">
                             <option selected="true" >Hora fin</option>
-                            @for ($i=13; $i<=23; $i++)
-                            <option value="{{ $i }}:00"
-                            @if(!empty($diasTrabajo[$key]) && $i.':00' == $diasTrabajo[$key]->afternoonEnd) selected @endif> {{ $i }}:00 </option>
-                            <option value="{{ $i }}:30"
-                            @if(!empty($diasTrabajo[$key]) && $i.':30' == $diasTrabajo[$key]->afternoonEnd) selected @endif> {{ $i }}:30 </option>
-                            @endfor
+                            @foreach($afternoonHours as $afternoonHour)
+                            <option value="{{ $afternoonHour }}"
+                            @if(!empty($diasTrabajo[$key]) && $afternoonHour == $diasTrabajo[$key]->afternoonEnd) selected @endif>
+                                {{$afternoonHour}} 
+                            </option>
+                            @endforeach
                         </select>
                     </div>
                 </div>

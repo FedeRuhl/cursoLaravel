@@ -45,12 +45,12 @@
         </li>
     @else {{--patient--}}
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('home') }}"">
+        <a class="nav-link" href="{{ route('appointment.create') }}"">
             <i class="ni ni-calendar-grid-58 text-primary"></i> Reservar turno
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('specialties') }}">
+        <a class="nav-link" href="{{ route('appointment.create') }}">
             <i class="ni ni-time-alarm text-info"></i> Mis citas
     </a>
     </li>

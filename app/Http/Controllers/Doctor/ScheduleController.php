@@ -9,21 +9,34 @@ use Carbon\Carbon;
 use App\WorkDay;
 class ScheduleController extends Controller
 {
+    private $days = [
+        'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'
+    ];
+
     public function edit(){
-        $days = [
-            'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'
-        ];
         $workDays = WorkDay::doctor()->get();
         //dd($workDays->toArray()); lo muestra en forma de arreglo
-
         $workDays->map(function ($workDay){
-            $workDay->morningStart = (new Carbon($workDay->morningStart))->format('G:i');
-            $workDay->morningEnd = (new Carbon($workDay->morningEnd))->format('G:i');
-            $workDay->afternoonStart = (new Carbon($workDay->afternoonStart))->format('G:i');
-            $workDay->afternoonEnd = (new Carbon($workDay->afternoonEnd))->format('G:i');
+            if ($workDay->morningStart != null) $workDay->morningStart = (new Carbon($workDay->morningStart))->format('H:i');
+            if ($workDay->morningEnd != null)$workDay->morningEnd = (new Carbon($workDay->morningEnd))->format('H:i');
+            if ($workDay->afternoonStart != null)$workDay->afternoonStart = (new Carbon($workDay->afternoonStart))->format('H:i');
+            if ($workDay->afternoonEnd != null)$workDay->afternoonEnd = (new Carbon($workDay->afternoonEnd))->format('H:i');
             return $workDay;
         });
-        return view('schedule', compact('workDays', 'days'));
+        $days = $this->days;
+
+        $morningHours = [];
+        for($i=5; $i<=12; $i++){
+            $morningHours[] = ($i<10 ? '0' : '') . $i . ':00';
+            $morningHours[] = ($i<10 ? '0' : '') . $i . ':30';
+        }
+
+        $afternoonHours = [];
+        for($i=13; $i<=23; $i++){
+            $afternoonHours[] = $i . ':00';
+            $afternoonHours[] = $i . ':30';
+        }
+        return view('schedule', compact('workDays', 'days', 'morningHours', 'afternoonHours'));
     }
 
     public function store(Request $request){
@@ -38,9 +51,9 @@ class ScheduleController extends Controller
         workDay::doctor()->where('day', '!=', $active[$i])->delete(); //eliminar dias que el medico ya no usa
         }
 
+        $errors = [];
         for($i=0; $i<sizeof($active); $i++){
             $dia = $active[$i];
-            echo "Dia: ".$dia;
 
             if (!preg_match("/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/", strval($morningStart[$dia])))
                 $morningStart[$dia] = null;
@@ -53,6 +66,14 @@ class ScheduleController extends Controller
 
             if (!preg_match("/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/", strval($afternoonEnd[$dia])))
                 $afternoonEnd[$dia] = null;
+
+            if ($morningStart[$dia] != null && $morningEnd[$dia] != null
+                && $morningStart[$dia]>$morningEnd[$dia])
+                $errors[] = "Las horas del turno mañana son inconsistenes para el día " . $this->days[$dia];
+
+            if ($afternoonStart[$dia] != null && $afternoonEnd[$dia] != null
+                && $afternoonStart[$dia]>$afternoonEnd[$dia])
+                $errors[] = "Las horas del turno tarde son inconsistenes para el día " . $this->days[$dia];
 
             WorkDay::updateOrCreate(
                 [
@@ -67,6 +88,10 @@ class ScheduleController extends Controller
                     'afternoonEnd' => $afternoonEnd[$dia]
                 ]);
         }
-        return back();
+        if (count($errors) > 0)
+            return back()->with(compact('errors'));
+        else
+            $notification = 'Los cambios se han guardado correctamente.';
+            return back()->with(compact('notification'));
     }
 }

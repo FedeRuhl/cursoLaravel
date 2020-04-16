@@ -62,4 +62,8 @@ Route::middleware(['auth', 'doctor'])->namespace('Doctor')->group(function(){
     Route::post('/schedule', 'ScheduleController@store')->name('schedule.store');
 });
 
+Route::get('/appointments/create', 'AppointmentController@create')->name('appointment.create');
+Route::post('/appointments', 'AppointmentController@store')->name('appointment.store');
+//para crear el modelo, la migracion de la db y además el controlador ejecutamos en consola: php artisan make:model Appointment -mc
+
 
