@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UsersTableSeeder::class); //esto invocará a el archivo UsersTableSeeder, el cual se crea escribiendo en consola php artisan make:seeder UsersTableSeeder
         //para ejecutar los seeders ejecutamos en consola php artisan db:seed
         //Podemos utilizar php artisan migrate:refresh --seed para crear nuevamente las tablas y además ejecutar los seeders
+        $this->call(SpecialtiesTableSeeder::class);
     }
 }

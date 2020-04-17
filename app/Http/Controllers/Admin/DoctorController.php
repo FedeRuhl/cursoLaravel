@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\User;
 use App\Http\Controllers\Controller;
+use App\Specialty;
 
 class DoctorController extends Controller
 {
@@ -26,7 +27,8 @@ class DoctorController extends Controller
      */
     public function create()
     {
-        return view('doctors.create');
+        $specialties = Specialty::all();
+        return view('doctors.create', compact('specialties'));
     }
 
     /**
@@ -57,13 +59,16 @@ class DoctorController extends Controller
         $this->validate($request, $rules, $messages);
 
         #mass assigment, en el modelo user se define los campos fillables
-        User::create($request->only('name', 'email', 'dni', 'address', 'phone') //es lo mismo que crear un objeto y llamar al método save
+        $user = User::create($request->only('name', 'email', 'dni', 'address', 'phone') //es lo mismo que crear un objeto y llamar al método save
         + [ //concatenamos arreglos
             'role' => 'doctor',
             'password' => bcrypt($request->input('password'))
         ]
-        ); 
+        );
         //se usa only en vez de all porque de esta forma evitamos que desde el navegador creen un usuario admin
+
+        $user->specialties()->attach($request->input('specialties'));//este metodo crea relaciones n a n
+
         $notification = "El médico se ha registrado correctamente.";
         return redirect('/doctors')->with(compact('notification'));
     }
@@ -87,8 +92,10 @@ class DoctorController extends Controller
      */
     public function edit($id)
     {
+        $specialties = Specialty::all();
         $doctor = User::doctors()->findOrFail($id);
-        return view('doctors.edit', compact('doctor'));
+        $specialty_ids = $doctor->specialties()->pluck('specialties.id'); //pluck obtiene de un arreglo lo que necesitemos, en este caso de las especialidades solo necesitamos los ID
+        return view('doctors.edit', compact('doctor', 'specialties', 'specialty_ids'));
     }
 
     /**
@@ -126,6 +133,7 @@ class DoctorController extends Controller
         $data['password'] = bcrypt($password);
         $user->fill($data); 
         $user->save();
+        $user->specialties()->sync($request->input('specialties')); //laravel se encarga de sincronizar las especialidades que vienen del form, hayan estado o no seleccionadas
         $notification = "El médico se ha modificado correctamente.";
         return redirect('/doctors')->with(compact('notification'));
     }

@@ -16,8 +16,8 @@ class CreateSpecialtyUserTable extends Migration
         Schema::create('specialty_user', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('doctor_id');
-            $table->foreign('doctor_id')->references('id')->on('users');
+            $table->unsignedBigInteger('user_id'); //usamos user para que laravel sepa que hacemos referencia al modelo User y a la tabla users
+            $table->foreign('user_id')->references('id')->on('users');
 
             $table->unsignedBigInteger('specialty_id');
             $table->foreign('specialty_id')->references('id')->on('specialties');

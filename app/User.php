@@ -38,7 +38,7 @@ class User extends Authenticatable
     ];
 
     public function specialties(){
-        return $this->belongsToMany(Specialty::class); //esto significa que una usuario se asocia con multiples especialidades
+        return $this->belongsToMany(Specialty::class)->withTimestamps(); //esto significa que una usuario se asocia con multiples especialidades
         // para establecer la relacion entre ambos modelos, se creo php artisan make:migration create_specialty_user_table
     }
 

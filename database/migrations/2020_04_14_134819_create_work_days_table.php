@@ -24,8 +24,8 @@ class CreateWorkDaysTable extends Migration
             $table->time('afternoonStart');
             $table->time('afternoonEnd');
 
-            $table->unsignedBigInteger('doctorId');
-            $table->foreign('doctorId')->references('id')->on('users');
+            $table->unsignedBigInteger('doctor_id');
+            $table->foreign('doctor_id')->references('id')->on('users');
             
             $table->timestamps();
 
