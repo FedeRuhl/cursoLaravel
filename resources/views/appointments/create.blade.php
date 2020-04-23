@@ -9,7 +9,7 @@
             <h3 class="mb-0">Registrar nuevo turno</h3>
         </div>
         <div class="col text-right">
-            <a href="{{ route('appointment.create') }}" class="btn btn-sm btn-default">Cancelar y volver</a>
+            <a href="{{ route('home') }}" class="btn btn-sm btn-default">Cancelar y volver</a>
         </div>
         </div>
     </div>
@@ -28,8 +28,9 @@
         <form action="{{ route('appointment.store') }}" method="post">
         @csrf
             <div class="form-group">
-                <label for="name"> Especialidad </label>
-                <select name="" id="" class="form-control">
+                <label for="specialty"> Especialidad </label>
+                <select name="specialty_id" id="specialty" class="form-control" required>
+                    <option selected="true" >Selecciona una especialidad</option>
                     @foreach($specialties as $specialty)
                     <option value="{{ $specialty->id }}"> {{$specialty->name}} </option>
                     @endforeach
@@ -38,7 +39,7 @@
 
             <div class="form-group">
                 <label for="email"> Médico </label>
-                <select name="" id="" class="form-control"></select>
+                <select name="doctor_id" id="doctor" class="form-control"></select>
             </div>
 
             <div class="form-group">
@@ -47,7 +48,9 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                     </div>
-                    <input class="form-control datepicker" placeholder="Eliga una fecha" type="text">
+                    <input class="form-control datepicker" placeholder="Eliga una fecha" type="text"
+                    value ="{{ date('Y/m/d') }}" data-date-format="yyyy/mm/dd" data-date-start-date="{{ date('Y/m/d') }}"
+                    data-date-end-date="+30d">
                 </div>
             </div>
 
@@ -63,11 +66,6 @@
                 <input type="text" name="phone" class="form-control"  value="{{ old('phone') }}"> 
             </div>
 
-            <div class="form-group">
-                <label for="password"> Contraseña </label>
-                <input type="text" name="password" class="form-control"  value="{{ Str::random(6) }}">
-            </div>
-
             <button type="submit" class="btn btn-primary">
                 Guardar
             </button>
@@ -79,4 +77,26 @@
 
 @section('scripts')
     <script src="{{ asset('/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+
+    <script>
+        let $doctor;
+        $(function () {
+            const $specialty = $('#specialty'); //creamos la variable con $ para indicar que es de jquery
+            $doctor = $('#doctor');
+            $specialty.change(() =>{ //cuando el elemento de ID specialty cambie, ejecutaremos esta función
+            const specialtyId = $specialty.val();
+            const url = `/specialties/${specialtyId}/doctors`; //usamos este tipo de comillas para hacer la interpolación
+            $.getJSON(url, onDoctorsLoaded); //funcion de callback
+            });
+        });
+
+        function onDoctorsLoaded(doctors){
+            let htmlOptions = '';
+            doctors.forEach(function (doctor){
+                htmlOptions += `<option value="${doctor.id}"> ${doctor.name} </option>`; 
+            });
+            $doctor.html(htmlOptions);
+        }
+        
+    </script>
 @endsection
