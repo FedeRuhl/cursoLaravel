@@ -15,10 +15,10 @@ class WorkDay extends Model
         'morningEnd',
         'afternoonStart',
         'afternoonEnd',
-        'doctorId'
+        'doctor_id'
     ];
 
     public function scopeDoctor($query){
-        return $query->where('doctorId', auth()->user()->id);
+        return $query->where('doctor_id', auth()->user()->id);
     }
 }

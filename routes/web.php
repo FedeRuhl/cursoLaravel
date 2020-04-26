@@ -71,6 +71,7 @@ Route::middleware('auth')->group(function() { //no protejemos con un middleware 
     //JSON
     Route::get('/specialties/{specialty}/doctors', 'Api\SpecialtyController@doctors')->name('specialties.doctors'); //form registro
     //php artisan make:controller Api\SpecialtyController
+    Route::get('/schedule/hours', 'Api\ScheduleController@hours')->name('schedule.hours'); //form registro
 }); 
 
 

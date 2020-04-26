@@ -49,7 +49,7 @@ class UsersTableSeeder extends Seeder
             'phone' => $faker->e164PhoneNumber,
             'role' => 'patient'
         ]);
-        //esto se define en el modelo UserFactory
+        //esto se define en el modelo UserFactory en database/factories
         factory(User::class, 50)->create();
     }
 }

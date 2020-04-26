@@ -47,10 +47,15 @@ class ScheduleController extends Controller
         $afternoonStart = $request->input('afternoonStart');
         $afternoonEnd = $request->input('afternoonEnd');
 
-        for($i=0; $i<sizeof($active); $i++){
-        workDay::doctor()->where('day', '!=', $active[$i])->delete(); //eliminar dias que el medico ya no usa
+        if ($active == null){
+            workDay::doctor()->delete();
         }
-
+        else{
+            for($i=0; $i<sizeof($active); $i++){
+                workDay::doctor()->where('day', '!=', $active[$i])->delete(); //eliminar dias que el medico ya no atiende
+                }
+        }
+        
         $errors = [];
         for($i=0; $i<sizeof($active); $i++){
             $dia = $active[$i];
@@ -67,18 +72,26 @@ class ScheduleController extends Controller
             if (!preg_match("/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/", strval($afternoonEnd[$dia])))
                 $afternoonEnd[$dia] = null;
 
+            if ($morningStart[$dia] != null && $morningEnd[$dia] == null
+                || $morningStart[$dia] == null && $morningEnd[$dia] != null) //si especifica hora inicio y no hora fin o viceversa
+                $errors[] = "Las horas del turno mañana son inconsistenes para el día " . $this->days[$dia];
+
+            if ($afternoonStart[$dia] != null && $afternoonEnd[$dia] == null 
+                || $afternoonStart[$dia] == null && $afternoonEnd[$dia] != null) //si especifica hora inicio y no hora fin o viceversa
+                $errors[] = "Las horas del turno tarde son inconsistenes para el día " . $this->days[$dia];    
+
             if ($morningStart[$dia] != null && $morningEnd[$dia] != null
-                && $morningStart[$dia]>$morningEnd[$dia])
+                && $morningStart[$dia]>$morningEnd[$dia]) //si hora inicio es mayor que hora fin
                 $errors[] = "Las horas del turno mañana son inconsistenes para el día " . $this->days[$dia];
 
             if ($afternoonStart[$dia] != null && $afternoonEnd[$dia] != null
-                && $afternoonStart[$dia]>$afternoonEnd[$dia])
+                && $afternoonStart[$dia]>$afternoonEnd[$dia]) //si hora inicio es mayor que hora fin
                 $errors[] = "Las horas del turno tarde son inconsistenes para el día " . $this->days[$dia];
 
             WorkDay::updateOrCreate(
                 [
                     'day' => $dia,
-                    'doctorId' => auth()->user()->id
+                    'doctor_id' => auth()->user()->id
                 ],
                 [
                     'active' => true,
