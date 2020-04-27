@@ -13,7 +13,7 @@ class ScheduleController extends Controller
     public function hours(Request $request){
 
         $rules = [
-            'date' => 'required|date_format:"Y-m-d"',
+            'date' => 'required',
             'doctor_id' => 'required|exists:users,id' //que existe en la tabla users
         ];
         $this->validate($request, $rules); //validar no es absolutamente necesario debido a que vamos a ser nosotros quien consumamos esta información
@@ -28,6 +28,10 @@ class ScheduleController extends Controller
                 ->where('doctor_id', $doctorId)->first([ //en vez de get se usa first porque solo necesitamos 1
                     'morningStart', 'morningEnd', 'afternoonStart', 'afternoonEnd'
                 ]);
+
+        if(!$workDay){
+            return [];
+        }
 
         $morningIntervals = [];
         $afternoonIntervals = [];

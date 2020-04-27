@@ -30,7 +30,7 @@
             <div class="form-group">
                 <label for="specialty"> Especialidad </label>
                 <select name="specialty_id" id="specialty" class="form-control" required>
-                    <option selected="true" >Selecciona una especialidad</option>
+                    <option selected="true" disabled="disabled">Selecciona una especialidad</option>
                     @foreach($specialties as $specialty)
                     <option value="{{ $specialty->id }}"> {{$specialty->name}} </option>
                     @endforeach
@@ -38,17 +38,17 @@
             </div>
 
             <div class="form-group">
-                <label for="email"> Médico </label>
+                <label for="doctor"> Médico </label>
                 <select name="doctor_id" id="doctor" class="form-control"></select>
             </div>
 
             <div class="form-group">
-                <label for="dni"> Fecha </label>
+                <label for="date"> Fecha </label>
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                     </div>
-                    <input class="form-control datepicker" placeholder="Eliga una fecha" type="text"
+                    <input class="form-control datepicker" placeholder="Eliga una fecha" type="text" id="date" name="date"
                     value ="{{ date('Y/m/d') }}" data-date-format="yyyy/mm/dd" data-date-start-date="{{ date('Y/m/d') }}"
                     data-date-end-date="+30d">
                 </div>
@@ -58,7 +58,9 @@
 
             <div class="form-group">
                 <label for="address"> Hora de atención </label>
-                <input type="text" name="address" class="form-control"  value="{{ old('address') }}">
+                <div id=hours>
+                    
+                </div>
             </div>
 
             <div class="form-group">
@@ -77,26 +79,5 @@
 
 @section('scripts')
     <script src="{{ asset('/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
-
-    <script>
-        let $doctor;
-        $(function () {
-            const $specialty = $('#specialty'); //creamos la variable con $ para indicar que es de jquery
-            $doctor = $('#doctor');
-            $specialty.change(() =>{ //cuando el elemento de ID specialty cambie, ejecutaremos esta función
-            const specialtyId = $specialty.val();
-            const url = `/specialties/${specialtyId}/doctors`; //usamos este tipo de comillas para hacer la interpolación
-            $.getJSON(url, onDoctorsLoaded); //funcion de callback
-            });
-        });
-
-        function onDoctorsLoaded(doctors){
-            let htmlOptions = '';
-            doctors.forEach(function (doctor){
-                htmlOptions += `<option value="${doctor.id}"> ${doctor.name} </option>`; 
-            });
-            $doctor.html(htmlOptions);
-        }
-        
-    </script>
+    <script src="{{ asset('js/appointments/create.js') }}"></script>
 @endsection
