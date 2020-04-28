@@ -13,6 +13,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        //id 1
         $faker = Faker::create(); //esto lo instancio para generar los datos falsos sobre mí persona
         User::create([
             'name' => 'Federico',
@@ -26,6 +27,7 @@ class UsersTableSeeder extends Seeder
             'role' => 'admin'
         ]);
 
+        //id 2
         User::create([
             'name' => 'Medico',
             'email' => 'medico@medico.com',
@@ -38,6 +40,7 @@ class UsersTableSeeder extends Seeder
             'role' => 'doctor'
         ]);
 
+        //id 3
         User::create([
             'name' => 'Paciente',
             'email' => 'paciente@paciente.com',
@@ -50,6 +53,7 @@ class UsersTableSeeder extends Seeder
             'role' => 'patient'
         ]);
         //esto se define en el modelo UserFactory en database/factories
-        factory(User::class, 50)->create();
+        factory(User::class, 50)->states('patient')->create();
+        //factory(User::class, 10)->states('doctor')->create();
     }
 }

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Specialty;
+use App\User;
 
 class SpecialtiesTableSeeder extends Seeder
 {
@@ -18,11 +19,17 @@ class SpecialtiesTableSeeder extends Seeder
                 'Neurología'
         ];
 
-        foreach($specialties as $specialty){
-            Specialty::create([
-                'name' => $specialty
+        foreach($specialties as $specialtyName){
+           $specialty = Specialty::create([
+                'name' => $specialtyName
             ]);
+            //make genera datos pero no los inserta en la bd
+            $specialty->users()->saveMany( //save many no espera un solo modelo, sino una coleccion
+                factory(User::class, 2)->states('doctor')->make()
+            );
         }
+
+        User::find(2)->specialties()->save($specialty); //medico test
 
     }
 }

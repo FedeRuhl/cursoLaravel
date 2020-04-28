@@ -27,7 +27,9 @@
     @endif
         <form action="{{ route('appointment.store') }}" method="post">
         @csrf
-            <div class="form-group">
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
                 <label for="specialty"> Especialidad </label>
                 <select name="specialty_id" id="specialty" class="form-control" required>
                     <option selected="true" disabled="disabled">Selecciona una especialidad</option>
@@ -37,40 +39,59 @@
                 </select>
             </div>
 
-            <div class="form-group">
+            <div class="form-group col-md-6">
                 <label for="doctor"> Médico </label>
                 <select name="doctor_id" id="doctor" class="form-control"></select>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label for="date"> Fecha </label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
-                    </div>
-                    <input class="form-control datepicker" placeholder="Eliga una fecha" type="text" id="date" name="date"
-                    value ="{{ date('Y/m/d') }}" data-date-format="yyyy/mm/dd" data-date-start-date="{{ date('Y/m/d') }}"
-                    data-date-end-date="+30d">
+        <div class="form-group">
+            <label for="date"> Fecha </label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
+                </div>
+                <input class="form-control datepicker" placeholder="Eliga una fecha" type="text" id="date" name="date"
+                value ="{{ date('Y/m/d') }}" data-date-format="yyyy/mm/dd" data-date-start-date="{{ date('Y/m/d') }}"
+                data-date-end-date="+30d">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="address"> Hora de atención </label>
+            <div id=hours>
+                <div class="alert alert-info" role="alert">
+                    Selecciona un médico y una fecha para determinar sus turnos disponibles.
                 </div>
             </div>
+        </div>
 
-            
-
-            <div class="form-group">
-                <label for="address"> Hora de atención </label>
-                <div id=hours>
-                    
-                </div>
+        <div class="form-group">
+            <label for="type"> Tipo de consulta </label>
+            <div class="custom-control custom-radio mb-3">
+                <input name="type" class="custom-control-input" id="type1" checked type="radio">
+                <label for="type1" class="custom-control-label">Consulta</label>
             </div>
-
-            <div class="form-group">
-                <label for="phone"> Teléfono </label>
-                <input type="text" name="phone" class="form-control"  value="{{ old('phone') }}"> 
+            <div class="custom-control custom-radio mb-3">
+                <input type="radio" name="type" id="type2" class="custom-control-input">
+                <label for="type2" class="custom-control-label">Examen</label>
             </div>
+            <div class="custom-control custom-radio mb-3">
+                <input type="radio" name="type" id="type3" class="custom-control-input">
+                <label for="type3" class="custom-control-label">Operacion</label>
+            </div>
+        </div>
 
-            <button type="submit" class="btn btn-primary">
-                Guardar
-            </button>
+        <div class="form-group">
+            <label for="">Descripcion</label>
+            <input type="text" name="description" id="description" class="form-control"
+            placeholder="Describa brevemente su consulta">
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Guardar
+        </button>
+
         </form>
     </div>
 </div>
