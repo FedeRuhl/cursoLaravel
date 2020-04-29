@@ -19,7 +19,7 @@ class CreateAppointmentsTable extends Migration
             $table->string('description');
             $table->string('type');
             $table->date('scheduled_date');
-            $table->date('scheduled_time');
+            $table->time('scheduled_time');
 
             //fk specialty
             $table->unsignedBigInteger('specialty_id');

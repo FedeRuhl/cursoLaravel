@@ -18,6 +18,11 @@ $(function () {
     $date.change(() =>{
         loadHours();
     });
+
+    $doctor.change(() =>{
+        loadHours();
+    });
+
 });
 
 function onDoctorsLoaded(doctors){
@@ -26,8 +31,6 @@ function onDoctorsLoaded(doctors){
         htmlOptions += `<option value="${doctor.id}"> ${doctor.name} </option>`; 
     });
     $doctor.html(htmlOptions);
-
-    loadHours(); //cambia el medico tambien
 }
 
 function loadHours(){
@@ -66,7 +69,7 @@ function getRadioHtml(interval){
     const text = `${interval.start} - ${interval.end}`;
     return `
 <div class="custom-control custom-radio mb-3">
-  <input name="interval" class="custom-control-input" id="interval${$iRadio}" type="radio" value="${text}">
+  <input name="scheduled_time" class="custom-control-input" id="interval${$iRadio}" type="radio" value="${interval.start}" required>
   <label class="custom-control-label" for="interval${$iRadio++}">${text}</label>
 </div>
 `;
