@@ -31,6 +31,7 @@ function onDoctorsLoaded(doctors){
         htmlOptions += `<option value="${doctor.id}"> ${doctor.name} </option>`; 
     });
     $doctor.html(htmlOptions);
+    loadHours();
 }
 
 function loadHours(){

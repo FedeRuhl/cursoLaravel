@@ -7,10 +7,11 @@ use Illuminate\Http\Request;
 
 use App\WorkDay;
 use Carbon\Carbon;
+use App\Interfaces\ScheduleServiceInterface;
 
 class ScheduleController extends Controller
 {
-    public function hours(Request $request){
+    public function hours(Request $request, ScheduleServiceInterface $scheduleService){ //inyeccion de dependencias
 
         $rules = [
             'date' => 'required',
@@ -18,47 +19,11 @@ class ScheduleController extends Controller
         ];
         $this->validate($request, $rules); //validar no es absolutamente necesario debido a que vamos a ser nosotros quien consumamos esta información
 
-        $dateCarbon = new Carbon($request->input('date'));
-        $dayCarbon = $dateCarbon->dayOfWeek;
-        $day = ($dayCarbon == 0 ? 6 : $dayCarbon-1);
+        $date = $request->input('date');
         $doctorId = $request->input('doctor_id');
 
-        $workDay = WorkDay::where('active', true)
-                ->where('day', $day)
-                ->where('doctor_id', $doctorId)->first([ //en vez de get se usa first porque solo necesitamos 1
-                    'morningStart', 'morningEnd', 'afternoonStart', 'afternoonEnd'
-                ]);
-
-        if(!$workDay){
-            return [];
-        }
-
-        $morningIntervals = [];
-        $afternoonIntervals = [];
-
-        if($workDay->morningStart != null && $workDay->morningEnd != null)
-            $morningIntervals = $this->getIntervals($workDay->morningStart, $workDay->morningEnd);
-        if($workDay->afternoonStart != null && $workDay->afternoonEnd != null)
-            $afternoonIntervals = $this->getIntervals($workDay->afternoonStart, $workDay->afternoonEnd);
-
-        $data = [];
-        $data['morning'] = $morningIntervals;
-        $data['afternoon'] = $afternoonIntervals;
-        return $data;
+        return $scheduleService->getAvailableIntervals($date, $doctorId);
     }
 
-    private function getIntervals($start, $end){
-        $startCarbon = new Carbon($start);
-        $endCarbon = new Carbon($end);
-
-        $intervals = [];
-        while ($startCarbon < $endCarbon){
-            $interval = [];
-            $interval['start'] = $startCarbon->format('H:i');
-            $startCarbon->addMinutes(30);
-            $interval['end'] = $startCarbon->format('H:i');
-            $intervals []= $interval;
-        }
-        return $intervals;
-    }
+    
 }
