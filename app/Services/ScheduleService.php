@@ -43,22 +43,29 @@ class ScheduleService implements ScheduleServiceInterface{
     private function getIntervals($start, $end, $doctorId, $scheduledDate){
         $startCarbon = new Carbon($start);
         $endCarbon = new Carbon($end);
-
         $intervals = [];
+
         while ($startCarbon < $endCarbon){
             $interval = [];
             $interval['start'] = $startCarbon->format('H:i');
 
-            $exists = Appointment::where('doctor_id', $doctorId)
-                    ->where('scheduled_date', $scheduledDate)
-                    ->where('scheduled_time', $startCarbon->format('H:i:s'))->exists();
-
+            $available = $this->isAvailableInterval($scheduledDate, $doctorId, $startCarbon);
+            
             $startCarbon->addMinutes(30);
             $interval['end'] = $startCarbon->format('H:i');
             
-            if(!$exists) //dias y horarios ya reservados ocupados
+            if($available) //dias y horarios ya reservados ocupados
             $intervals []= $interval;
         }
         return $intervals;
+    }
+
+    public function isAvailableInterval($scheduledDate, $doctorId, Carbon $time){
+        $time->format('H:i:s');
+        $exists = Appointment::where('doctor_id', $doctorId)
+                    ->where('scheduled_date', $scheduledDate)
+                    ->where('scheduled_time', $time)->exists();
+
+        return !$exists;
     }
 }

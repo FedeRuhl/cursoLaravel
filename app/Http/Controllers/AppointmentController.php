@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Specialty;
 use App\Interfaces\ScheduleServiceInterface;
 use App\Appointment;
+use Validator;
+use Carbon\Carbon;
 
 class AppointmentController extends Controller
 {
@@ -30,12 +32,12 @@ class AppointmentController extends Controller
         return view('appointments.create', compact('specialties', 'doctors', 'intervals'));
     }
 
-    public function store(Request $request){
+    public function store(Request $request, ScheduleServiceInterface $scheduleService){
 
         $rules = [
             'description' => 'required',
             'specialty_id' => 'exists:specialties,id',
-            'doctor_id' => 'exists:users,id',
+            'doctor_id' => 'required|exists:users,id',
             'scheduled_time' => 'required',
             'scheduled_date' => 'required'
         ];
@@ -45,7 +47,25 @@ class AppointmentController extends Controller
             'scheduled_date.required' => 'Por favor, seleccione una fecha disponible.'
         ];
 
-        $this->validate($request, $rules, $messages);
+        $validator = Validator::make($request->all(), $rules, $messages); //ya que con validate no es suficiente
+
+        $validator->after(function ($validator) use ($request, $scheduleService) { //la funcion anonima no reconoce la variable si no se pone 'use'
+            $date = $request->input('scheduled_date');
+            $doctorId = $request->input('doctor_id');
+            $scheduledTime = $request->input('scheduled_time');
+            $start = new Carbon($scheduledTime);
+
+            if($scheduleService->isAvailableInterval($date, $doctorId, $start) == false){
+                $validator->errors()
+                          ->add('available_time', 'La hora seleccionada se acaba de reservar por otro paciente.');
+            }
+        });
+
+        if($validator->fails()){
+            return back()
+                    ->withErrors($validator)
+                    ->withInput();
+        }
 
         $data = $request->only([
             'description',
