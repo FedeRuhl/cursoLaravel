@@ -94,17 +94,17 @@
             <label for="type"> Tipo de consulta </label>
             <div class="custom-control custom-radio mb-3">
                 <input name="type" class="custom-control-input" id="type1" type="radio"
-                @if(old('type', 'consultation') == 'consultation') checked @endif value="consultation">
+                @if(old('type', 'Consulta') == 'Consulta') checked @endif value="Consulta">
                 <label for="type1" class="custom-control-label">Consulta</label>
             </div>
             <div class="custom-control custom-radio mb-3">
                 <input type="radio" name="type" id="type2" class="custom-control-input"
-                @if(old('type') == 'examination') checked @endif value="examination">
+                @if(old('type') == 'Examen') checked @endif value="Examen">
                 <label for="type2" class="custom-control-label">Examen</label>
             </div>
             <div class="custom-control custom-radio mb-3">
                 <input type="radio" name="type" id="type3" class="custom-control-input"
-                @if(old('type') == 'operation') checked @endif value="operation">
+                @if(old('type') == 'Operacion') checked @endif value="Operacion">
                 <label for="type3" class="custom-control-label">Operacion</label>
             </div>
         </div>

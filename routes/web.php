@@ -65,6 +65,11 @@ Route::middleware(['auth', 'doctor'])->namespace('Doctor')->group(function(){
 Route::middleware('auth')->group(function() { //no protejemos con un middleware especial para que un admin/medico puede reservar citas
     Route::get('/appointments/create', 'AppointmentController@create')->name('appointment.create');
     Route::post('/appointments', 'AppointmentController@store')->name('appointment.store');
+
+    Route::get('/patient/appointments', 'AppointmentController@patientList')->name('appointment.patient');
+    //Route::get('/doctor/appointments', 'AppointmentController@index')->name('appointment.patient');
+    //Route::get('/admin/appointments', 'AppointmentController@index')->name('appointment.patient');
+
     //para crear el modelo, la migracion de la db y además el controlador ejecutamos en consola: php artisan make:model Appointment -mc
 
 

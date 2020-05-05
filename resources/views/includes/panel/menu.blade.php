@@ -50,7 +50,7 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('appointment.create') }}">
+        <a class="nav-link" href="{{ route('appointment.patient') }}">
             <i class="ni ni-time-alarm text-info"></i> Mis citas
     </a>
     </li>

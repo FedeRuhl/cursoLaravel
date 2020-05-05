@@ -11,6 +11,19 @@ use Carbon\Carbon;
 
 class AppointmentController extends Controller
 {
+    public function patientList(){
+        $confirmedAppointments = Appointment::where('status', 'Confirmado')
+            ->where('patient_id', auth()->id())
+            ->paginate(10);
+        $pendingAppointments = Appointment::where('status', 'Reservado')
+            ->where('patient_id', auth()->id())
+            ->paginate(10);
+        $oldAppointments = Appointment::whereIn('status', ['Atendido', 'Cancelado'])
+            ->where('patient_id', auth()->id())
+            ->paginate(10);
+        return view('appointments.patient', compact('confirmedAppointments', 'pendingAppointments', 'oldAppointments'));
+    }
+
     public function create(ScheduleServiceInterface $scheduleService){
         $specialties = Specialty::all();
 
