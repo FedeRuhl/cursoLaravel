@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Specialty;
 use App\Interfaces\ScheduleServiceInterface;
 use App\Appointment;
+use App\CancelledAppointment;
 use Validator;
 use Carbon\Carbon;
 
@@ -94,5 +95,41 @@ class AppointmentController extends Controller
         
         $notification = "El turno se ha reservado correctamente.";
         return back()->with(compact('notification'));
+    }
+
+    public function showCancelForm(Appointment $appointment){
+
+        if($appointment->status == 'Confirmado')
+            return view('appointments.cancel', compact('appointment'));
+        else return redirect(route('appointment.patient'));
+    }
+
+    public function cancel(Appointment $appointment, Request $request){
+        if ($request){
+
+            $rules = [
+                'justification' => ['required', 'min:10', 'max:255', 'alpha_num'],
+            ];
+    
+            $messages = [
+                'justification.required' => 'La justificación es un campo obligatorio.',
+                'justification.min' => 'La justificación debe contener como mínimo 10 caracteres.',
+                'justification.max' => 'La justificación no debe exceder los 255 caracteres.',
+                'justification.alpha_num' => 'Ha ingresado caracteres no permitidos.'
+            ];
+
+            $this->validate($request, $rules, $messages);
+            $cancellation = new CancelledAppointment();
+            $cancellation->justification = $request->input('justification');
+            $cancellation->cancelled_by = auth()->id();
+
+            $appointment->cancellation()->save($cancellation);
+        }
+        
+        $appointment->status = 'Cancelado';
+        $appointment->save(); //update
+
+        $notification = "La cita se ha cancelado correctamente";
+        return redirect(route('appointment.patient'))->with(compact('notification'));
     }
 }

@@ -37,9 +37,8 @@
                 {{ $appointment->status }}
                 </td>
                 <td>
-                    <form action="{{ route('appointment.patient', $appointment->id) }}" method="POST">
+                    <form action="{{ route('appointment.cancel', $appointment->id) }}" method="POST">
                         @csrf
-                        @method('DELETE')
                         <button type="submit" class="btn btn-sm btn-danger" title="Cancelar turno"> Cancelar </button>
                     </form>
                 </td>

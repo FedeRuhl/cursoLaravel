@@ -9,6 +9,7 @@
             <th scope="col">Fecha</th>
             <th scope="col">Horario</th>
             <th scope="col">Tipo</th>
+            <th scope="col">Estado</th>
             </tr>
         </thead>
         <tbody>
@@ -33,11 +34,7 @@
                 {{ $appointment->type }}
                 </td>
                 <td>
-                    <form action="{{ route('appointment.patient', $appointment->id) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-sm btn-danger" title="Cancelar turno"> Cancelar </button>
-                    </form>
+                {{ $appointment->status }}
                 </td>
             </tr>
         @endforeach

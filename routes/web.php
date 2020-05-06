@@ -70,6 +70,10 @@ Route::middleware('auth')->group(function() { //no protejemos con un middleware 
     //Route::get('/doctor/appointments', 'AppointmentController@index')->name('appointment.patient');
     //Route::get('/admin/appointments', 'AppointmentController@index')->name('appointment.patient');
 
+    Route::get('/appointments/{appointment}/cancel', 'AppointmentController@showCancelForm')->name('appointment.showCancelForm');
+    Route::post('/appointments/{appointment}/cancel', 'AppointmentController@cancel')->name('appointment.cancel');
+    
+
     //para crear el modelo, la migracion de la db y además el controlador ejecutamos en consola: php artisan make:model Appointment -mc
 
 

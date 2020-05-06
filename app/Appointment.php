@@ -31,6 +31,12 @@ class Appointment extends Model
         //laravel gracias a patient_id identifica a los pacientes
     }
 
+    //$appointment->cancellation
+    public function cancellation(){
+        // has one 1 a 1/0 belongsTo
+        return $this->hasOne(CancelledAppointment::class);
+    }
+
     //accessor: campo calculado
     //$appointment->scheduled_time_24
     public function getScheduledTime24Attribute(){
