@@ -13,6 +13,7 @@ use Carbon\Carbon;
 class AppointmentController extends Controller
 {
     public function patientList(){
+        $role = auth()->user()->role;
         $confirmedAppointments = Appointment::where('status', 'Confirmado')
             ->where('patient_id', auth()->id())
             ->paginate(10);
@@ -22,7 +23,21 @@ class AppointmentController extends Controller
         $oldAppointments = Appointment::whereIn('status', ['Atendido', 'Cancelado'])
             ->where('patient_id', auth()->id())
             ->paginate(10);
-        return view('appointments.patient', compact('confirmedAppointments', 'pendingAppointments', 'oldAppointments'));
+        return view('appointments.patient', compact('confirmedAppointments', 'pendingAppointments', 'oldAppointments', 'role'));
+    }
+
+    public function doctorList(){
+        $role = auth()->user()->role;
+        $confirmedAppointments = Appointment::where('status', 'Confirmado')
+            ->where('doctor_id', auth()->id())
+            ->paginate(10);
+        $pendingAppointments = Appointment::where('status', 'Reservado')
+            ->where('doctor_id', auth()->id())
+            ->paginate(10);
+        $oldAppointments = Appointment::whereIn('status', ['Atendido', 'Cancelado'])
+            ->where('doctor_id', auth()->id())
+            ->paginate(10);
+        return view('appointments.doctor', compact('confirmedAppointments', 'pendingAppointments', 'oldAppointments', 'role'));
     }
 
     public function create(ScheduleServiceInterface $scheduleService){
@@ -105,8 +120,7 @@ class AppointmentController extends Controller
     }
 
     public function cancel(Appointment $appointment, Request $request){
-        if ($request){
-
+        if ($request->has('justification')){
             $rules = [
                 'justification' => ['required', 'min:10', 'max:255', 'alpha_num'],
             ];
@@ -117,19 +131,25 @@ class AppointmentController extends Controller
                 'justification.max' => 'La justificación no debe exceder los 255 caracteres.',
                 'justification.alpha_num' => 'Ha ingresado caracteres no permitidos.'
             ];
-
+    
             $this->validate($request, $rules, $messages);
             $cancellation = new CancelledAppointment();
             $cancellation->justification = $request->input('justification');
-            $cancellation->cancelled_by = auth()->id();
-
+            $cancellation->cancelled_by_id = auth()->id();
+    
             $appointment->cancellation()->save($cancellation);
         }
-        
         $appointment->status = 'Cancelado';
         $appointment->save(); //update
 
         $notification = "La cita se ha cancelado correctamente";
+        if (auth()->user()->role == 'patient')
         return redirect(route('appointment.patient'))->with(compact('notification'));
+
+        else return redirect(route('appointment.doctor'))->with(compact('notification'));
+    }
+
+    public function confirm(Appointment $appointment){
+
     }
 }

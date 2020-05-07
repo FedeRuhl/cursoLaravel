@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/login');
 });
 
 Auth::routes();
@@ -67,11 +67,12 @@ Route::middleware('auth')->group(function() { //no protejemos con un middleware 
     Route::post('/appointments', 'AppointmentController@store')->name('appointment.store');
 
     Route::get('/patient/appointments', 'AppointmentController@patientList')->name('appointment.patient');
-    //Route::get('/doctor/appointments', 'AppointmentController@index')->name('appointment.patient');
+    Route::get('/doctor/appointments', 'AppointmentController@doctorList')->name('appointment.doctor');
     //Route::get('/admin/appointments', 'AppointmentController@index')->name('appointment.patient');
 
     Route::get('/appointments/{appointment}/cancel', 'AppointmentController@showCancelForm')->name('appointment.showCancelForm');
     Route::post('/appointments/{appointment}/cancel', 'AppointmentController@cancel')->name('appointment.cancel');
+    Route::post('/appointments/{appointment}/confirm', 'AppointmentController@confirm')->name('appointment.confirm');
     
 
     //para crear el modelo, la migracion de la db y además el controlador ejecutamos en consola: php artisan make:model Appointment -mc

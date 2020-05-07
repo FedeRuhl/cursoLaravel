@@ -6,7 +6,7 @@
     @endif
 </h6>
 <ul class="navbar-nav">
-    @if (auth()->user()->role == 'admin')
+    @if (auth()->user()->role == 'admin') {{--admin--}}
     <li class="nav-item">
     <a class="nav-link" href="{{ route('home') }}"">
         <i class="ni ni-tv-2 text-primary"></i> Dashboard
@@ -27,20 +27,20 @@
         <i class="ni ni-satisfied text-success"></i> Pacientes
     </a>
     </li>
-    @elseif (auth()->user()->role == 'doctor')
+    @elseif (auth()->user()->role == 'doctor') {{--doctor--}}
     <li class="nav-item">
         <a class="nav-link" href="{{ route('schedule.edit') }}"">
             <i class="ni ni-calendar-grid-58 text-primary"></i> Gestionar horario
         </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('patients') }}">
+            <a class="nav-link" href="{{ route('appointment.doctor') }}">
                 <i class="ni ni-satisfied text-success"></i> Mis pacientes
         </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('specialties') }}">
-                <i class="ni ni-time-alarm text-info"></i> Mis citas
+                <i class="ni ni-time-alarm text-info"></i> Mis turnos
         </a>
         </li>
     @else {{--patient--}}
@@ -51,7 +51,7 @@
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ route('appointment.patient') }}">
-            <i class="ni ni-time-alarm text-info"></i> Mis citas
+            <i class="ni ni-time-alarm text-info"></i> Mis turnos
     </a>
     </li>
 

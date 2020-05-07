@@ -5,7 +5,11 @@
             <tr>
             <th scope="col">Descripcion</th>
             <th scope="col">Especialidad</th>
+            @if($role == 'patient')
             <th scope="col">Médico</th>
+            @elseif ($role == 'doctor')
+            <th scope="col">Paciente</th>
+            @endif
             <th scope="col">Fecha</th>
             <th scope="col">Horario</th>
             <th scope="col">Tipo</th>
@@ -20,9 +24,15 @@
                 <td>
                 {{ $appointment->specialty->name }}
                 </td>
+                @if($role == 'patient')
                 <td>
                 {{ $appointment->doctor->name }}
                 </td>
+                @elseif ($role == 'doctor')
+                <td>
+                    {{ $appointment->patient->name }}
+                </td>
+                @endif
                 <td>
                 {{ $appointment->scheduled_date }}
                 </td>
@@ -33,7 +43,7 @@
                 {{ $appointment->type }}
                 </td>
                 <td>
-                <a href="{{ route('appointment.showCancelForm', $appointment->id) }}" class="btn btn-sm btn-danger" title="Cancelar turno">Cancelar</a>
+                <a href="{{ route('appointment.showCancelForm', $appointment) }}" class="btn btn-sm btn-danger" title="Cancelar turno">Cancelar</a>
                 </td>
             </tr>
         @endforeach

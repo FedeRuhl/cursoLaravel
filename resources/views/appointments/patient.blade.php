@@ -15,6 +15,20 @@
             <strong> {{session('notification')}} </strong>
         </div>
         @endif
+
+        @if($errors->any()) {{-- esto no iba --}}
+            <ul>
+                <div class="alert alert-danger" role="alert">
+                    @foreach ($errors->all() as $error)
+                    <li>
+                        {{ $error }}
+                    </li>
+                    @endforeach
+                </div>
+            </ul>
+            @endif
+
+
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="pill" href="#confirmed-appointments" role="tab" aria-selected="true">
@@ -28,7 +42,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="pill" href="#old-appointments" role="tab" aria-selected="false">
-                    Historial de turnos atendidos
+                    Historial de turnos
                 </a>
             </li>
         </ul>

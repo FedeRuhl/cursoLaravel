@@ -42,4 +42,8 @@ class Appointment extends Model
     public function getScheduledTime24Attribute(){
         return (new Carbon($this->scheduled_time))->format('H:i');
     }
+
+    public function patient(){
+        return $this->belongsTo(User::class);
+    }
 }

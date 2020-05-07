@@ -35,6 +35,14 @@
                 </td>
                 <td>
                 {{ $appointment->status }}
+                    @if($appointment->cancellation)
+                        <button type="button" class="btn btn-sm btn-info" data-toggle="popover" title="Info Cancelación" 
+                        data-content=" Cancelado por {{ $appointment->cancellation->cancelled_by->name }} el
+                        {{ $appointment->cancellation->created_at }}
+                        con la siguiente justificación: {{ $appointment->cancellation->justification }}">
+                            ?
+                        </button>
+                    @endif
                 </td>
             </tr>
         @endforeach
