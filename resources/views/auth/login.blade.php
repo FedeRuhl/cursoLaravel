@@ -49,8 +49,8 @@ Inicio de sesión
                                 @enderror
                   </div>
                 </div>
-                <div class="custom-control custom-control-alternative custom-checkbox">
-                  <input name="remember" class="custom-control-input" id="rembember" type="checkbox"> {{ old('remember') ? 'checked' : '' }}
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" name="remember" id="remember"> {{ old('remember') ? 'checked' : '' }}
                   <label class="custom-control-label" for="remember">
                     <span class="text-muted">Recuerdame</span>
                   </label>
