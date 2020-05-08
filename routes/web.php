@@ -68,7 +68,7 @@ Route::middleware('auth')->group(function() { //no protejemos con un middleware 
 
     Route::get('/patient/appointments', 'AppointmentController@patientList')->name('appointment.patient');
     Route::get('/doctor/appointments', 'AppointmentController@doctorList')->name('appointment.doctor');
-    //Route::get('/admin/appointments', 'AppointmentController@index')->name('appointment.patient');
+    Route::get('/admin/appointments', 'AppointmentController@adminList')->name('appointment.admin');
 
     Route::get('/appointments/{appointment}/cancel', 'AppointmentController@showCancelForm')->name('appointment.showCancelForm');
     Route::post('/appointments/{appointment}/cancel', 'AppointmentController@cancel')->name('appointment.cancel');

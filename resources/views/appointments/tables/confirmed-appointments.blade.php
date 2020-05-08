@@ -5,14 +5,16 @@
             <tr>
             <th scope="col">Descripcion</th>
             <th scope="col">Especialidad</th>
-            @if($role == 'patient')
+            @if($role == 'patient' or $role == 'admin')
             <th scope="col">Médico</th>
-            @elseif ($role == 'doctor')
+            @endif
+            @if ($role == 'doctor' or $role == 'admin')
             <th scope="col">Paciente</th>
             @endif
-            <th scope="col">Fecha</th>
+            <th scope="col">Fecha</th> 
             <th scope="col">Horario</th>
             <th scope="col">Tipo</th>
+            <th scope="col">Opciones</th>
             </tr>
         </thead>
         <tbody>
@@ -24,11 +26,12 @@
                 <td>
                 {{ $appointment->specialty->name }}
                 </td>
-                @if($role == 'patient')
+                @if($role == 'patient' or $role == 'admin')
                 <td>
                 {{ $appointment->doctor->name }}
                 </td>
-                @elseif ($role == 'doctor')
+                @endif
+                @if ($role == 'doctor' or $role == 'admin')
                 <td>
                     {{ $appointment->patient->name }}
                 </td>
@@ -43,7 +46,9 @@
                 {{ $appointment->type }}
                 </td>
                 <td>
-                <a href="{{ route('appointment.showCancelForm', $appointment) }}" class="btn btn-sm btn-danger" title="Cancelar turno">Cancelar</a>
+                    <a href="{{ route('appointment.showCancelForm', $appointment) }}" class="btn btn-sm btn-danger" title="Cancelar turno">
+                        Cancelar
+                    </a>
                 </td>
             </tr>
         @endforeach

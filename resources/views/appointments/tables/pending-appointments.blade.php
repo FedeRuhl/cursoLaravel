@@ -5,9 +5,10 @@
             <tr>
             <th scope="col">Descripcion</th>
             <th scope="col">Especialidad</th>
-            @if($role == 'patient')
+            @if($role == 'patient' or $role == 'admin')
             <th scope="col">Médico</th>
-            @elseif ($role == 'doctor')
+            @endif
+            @if ($role == 'doctor' or $role == 'admin')
             <th scope="col">Paciente</th>
             @endif
             <th scope="col">Fecha</th>
@@ -26,11 +27,12 @@
                 <td>
                 {{ $appointment->specialty->name }}
                 </td>
-                @if($role == 'patient')
+                @if($role == 'patient' or $role == 'admin')
                 <td>
                 {{ $appointment->doctor->name }}
                 </td>
-                @elseif ($role == 'doctor')
+                @endif
+                @if ($role == 'doctor' or $role == 'admin')
                 <td>
                     {{ $appointment->patient->name }}
                 </td>
@@ -55,16 +57,19 @@
                             <i class="ni ni-check-bold"></i>
                         </button>
                     </form>
-                    @endif
-                    
-                </td>
-                <td>
+                    {{-- el medico y el admin SI deben justificar por qué cancelan un turno en espera --}}
+                    <a href="{{ route('appointment.showCancelForm', $appointment) }}" class="btn btn-sm btn-danger" title="Cancelar turno" data-toggle="tooltip">
+                        <i class="ni ni-fat-remove"></i>
+                    </a>
+                    @else
+                    {{-- el paciente puede cancelar un turno sin justificar siempre y cuando el medico no lo haya confirmado --}}
                     <form action="{{ route('appointment.cancel', $appointment) }}" method="POST" class="d-inline-block">
                         @csrf
                         <button type="submit" class="btn btn-sm btn-danger" title="Cancelar turno" data-toggle="tooltip">
                             <i class="ni ni-fat-remove"></i>
                         </button>
                     </form>
+                    @endif
                 </td>
             </tr>
         @endforeach

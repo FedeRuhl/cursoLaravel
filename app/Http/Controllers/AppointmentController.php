@@ -40,6 +40,17 @@ class AppointmentController extends Controller
         return view('appointments.doctor', compact('confirmedAppointments', 'pendingAppointments', 'oldAppointments', 'role'));
     }
 
+    public function adminList(){
+        $role = auth()->user()->role;
+        $confirmedAppointments = Appointment::where('status', 'Confirmado')
+            ->paginate(10);
+        $pendingAppointments = Appointment::where('status', 'Reservado')
+            ->paginate(10);
+        $oldAppointments = Appointment::whereIn('status', ['Atendido', 'Cancelado'])
+            ->paginate(10);
+        return view('appointments.admin', compact('confirmedAppointments', 'pendingAppointments', 'oldAppointments', 'role'));
+    }
+
     public function create(ScheduleServiceInterface $scheduleService){
         $specialties = Specialty::all();
 
@@ -113,10 +124,11 @@ class AppointmentController extends Controller
     }
 
     public function showCancelForm(Appointment $appointment){
+        $role = auth()->user()->role;
 
-        if($appointment->status == 'Confirmado')
-            return view('appointments.cancel', compact('appointment'));
-        else return redirect(route('appointment.patient'));
+        if($appointment->status == 'Confirmado' or $appointment->status == 'Reservado')
+            return view('appointments.cancel', compact('appointment', 'role'));
+        else return redirect(route('appointment.'.$role));
     }
 
     public function cancel(Appointment $appointment, Request $request){
@@ -136,20 +148,37 @@ class AppointmentController extends Controller
             $cancellation = new CancelledAppointment();
             $cancellation->justification = $request->input('justification');
             $cancellation->cancelled_by_id = auth()->id();
-    
             $appointment->cancellation()->save($cancellation);
         }
         $appointment->status = 'Cancelado';
         $appointment->save(); //update
 
         $notification = "La cita se ha cancelado correctamente";
-        if (auth()->user()->role == 'patient')
-        return redirect(route('appointment.patient'))->with(compact('notification'));
-
-        else return redirect(route('appointment.doctor'))->with(compact('notification'));
+        
+        if (auth()->user()->role == 'patient'){
+            return redirect(route('appointment.patient'))->with(compact('notification'));
+        }
+        else if (auth()->user()->role == 'doctor'){
+            return redirect(route('appointment.doctor'))->with(compact('notification'));
+        }
+        else{
+            return redirect(route('appointment.admin'))->with(compact('notification'));
+        }
     }
 
     public function confirm(Appointment $appointment){
+        $appointment->status = 'Confirmado';
+        $appointment->save(); //update
 
+        $notification = "La cita se ha cancelado correctamente";
+        if (auth()->user()->role == 'patient'){
+            return redirect(route('appointment.patient'))->with(compact('notification'));
+        }
+        else if (auth()->user()->role == 'doctor'){
+            return redirect(route('appointment.doctor'))->with(compact('notification'));
+        }
+        else{
+            return redirect(route('appointment.admin'))->with(compact('notification'));
+        }
     }
 }

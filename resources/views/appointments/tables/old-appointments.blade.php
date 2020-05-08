@@ -5,7 +5,12 @@
             <tr>
             <th scope="col">Descripcion</th>
             <th scope="col">Especialidad</th>
+            @if($role == 'patient' or $role == 'admin')
             <th scope="col">Médico</th>
+            @endif
+            @if($role == 'doctor' or $role == 'admin')
+            <th scope="col">Paciente</th>
+            @endif
             <th scope="col">Fecha</th>
             <th scope="col">Horario</th>
             <th scope="col">Tipo</th>
@@ -21,9 +26,16 @@
                 <td>
                 {{ $appointment->specialty->name }}
                 </td>
+                @if($role == 'patient' or $role == 'admin')
                 <td>
                 {{ $appointment->doctor->name }}
                 </td>
+                @endif
+                @if($role == 'doctor' or $role == 'admin')
+                <td>
+                {{ $appointment->patient->name }}
+                </td>
+                @endif
                 <td>
                 {{ $appointment->scheduled_date }}
                 </td>

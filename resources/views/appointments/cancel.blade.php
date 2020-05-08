@@ -15,10 +15,22 @@
             <strong> {{session('notification')}} </strong>
         </div>
         @endif
+        @if($role == 'paciente')
         <p>
-             Estás a punto de cancelar tu turno reservado para la fecha {{ $appointment->scheduled_date}}
+             Estás a punto de cancelar tu turno confirmado para la fecha {{ $appointment->scheduled_date}}
              de horario {{ $appointment->scheduled_time_24 }} con el médico {{ $appointment->doctor->name }}
         </p>
+        @elseif($role == 'admin')
+        <p>
+            Estás a punto de cancelar el turno confirmado para el paciente {{ $appointment->patient->name }}
+            en la fecha {{ $appointment->scheduled_date}} al horario {{ $appointment->scheduled_time_24 }}
+            con el médico {{ $appointment->doctor->name }}
+       </p>
+        @else
+            Estás a punto de cancelar tu turno confirmado para la fecha {{ $appointment->scheduled_date}}
+            de horario {{ $appointment->scheduled_time_24 }} con el paciente {{ $appointment->patient->name }}
+        @endif
+
         <p>
             @if($errors->any())
             <ul>
@@ -36,11 +48,10 @@
             @csrf
             <div class="form-group">
                 <label for="justification">Por favor, cuéntanos el motivo de la cancelación:</label>
-                <textarea name="justification" rows="5" class="form-control" required>
-                </textarea>
+                <textarea name="justification" rows="5" class="form-control" required autofocus></textarea>
             </div>
             <button type="submit" class="btn btn-danger">Cancelar turno</button>
-            <a href="{{ route('appointment.patient') }}" class="btn btn-primary">
+            <a href="{{ route('appointment.'. $role) }}" class="btn btn-primary">
                 Volver al listado de turnos sin cancelar
             </a>
         </form>
