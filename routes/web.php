@@ -54,6 +54,13 @@ Route::middleware(['auth', 'admin'])->namespace('Admin')->group(function(){ //en
         'update' => 'patients.update',
         'destroy' => 'patients.destroy'
     ]);
+
+    // Charts
+    Route::get('/charts/appointments/line', 'ChartController@appointments')->name('charts.appointments.line');
+    //php artisan make:controller Admin\ChartController
+
+    Route::get('/charts/doctors/column', 'ChartController@doctors')->name('charts.doctors.column');
+    Route::get('/charts/doctors/column/data', 'ChartController@doctorJson')->name('charts.doctors.column.data');
 });
 
 Route::middleware(['auth', 'doctor'])->namespace('Doctor')->group(function(){
@@ -74,8 +81,8 @@ Route::middleware('auth')->group(function() { //no protejemos con un middleware 
     Route::post('/appointments/{appointment}/cancel', 'AppointmentController@cancel')->name('appointment.cancel');
     Route::post('/appointments/{appointment}/confirm', 'AppointmentController@confirm')->name('appointment.confirm');
     
-
     //para crear el modelo, la migracion de la db y además el controlador ejecutamos en consola: php artisan make:model Appointment -mc
+
 
 
     //JSON
