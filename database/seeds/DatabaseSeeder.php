@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
         //Podemos utilizar php artisan migrate:refresh --seed para crear nuevamente las tablas y además ejecutar los seeders
         $this->call([
             SpecialtiesTableSeeder::class,
-            WorkDaysTableSeeder::class
+            WorkDaysTableSeeder::class,
+            AppointmentsTableSeeder::class //para ejecutar un seeder en específico sin refrescar la db, php artisan db:seed --class=AppointmentsTableSeeder
         ]); //tambien podriamos poner el primer call dentro de este arreglo, pero queda a modo de ejemplo
     }
 }

@@ -54,6 +54,14 @@ class User extends Authenticatable
         return $this->hasMany(Appointment::class, 'doctor_id');
     }
 
+    public function attendedAppointments(){
+        return $this->AsDoctorAppointments()->where('status', 'Atendido');
+    }
+
+    public function cancelledAppointments(){
+        return $this->AsDoctorAppointments()->where('status', 'Cancelado');
+    }
+
     public function AsPatientAppointments(){
         return $this->hasMany(Appointment::class, 'patient_id');
     }

@@ -31,7 +31,7 @@ class CreateAppointmentsTable extends Migration
 
             //fk patient
             $table->unsignedBigInteger('patient_id');
-            $table->foreign('patient_id')->references('id')->on('specialties');
+            $table->foreign('patient_id')->references('id')->on('users');
 
             $table->timestamps();
         });
@@ -44,6 +44,8 @@ class CreateAppointmentsTable extends Migration
      */
     public function down()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('appointments');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

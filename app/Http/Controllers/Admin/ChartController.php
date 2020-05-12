@@ -35,21 +35,22 @@ class ChartController extends Controller
     public function doctorJson(){
         $doctors = User::doctors()
         ->select('id', 'name')
-        ->withCount('asDoctorAppointments')
-        ->orderBy('as_doctor_appointments_count', 'desc')
+        ->withCount(['attendedAppointments', 'cancelledAppointments'])
+        ->orderBy('attended_appointments_count', 'desc')
+        ->orderBy('cancelled_appointments_count', 'desc')
         ->take(3)
-        ->get()->toArray();
-        dd($doctors);
-
+        ->get();
 
         $data = [];
-        $data['categories'] = User::doctors()->pluck('name'); //usamos pluck porque es una sola columna y para obtenerlo en formato arreglo
+        $data['categories'] = $doctors->pluck('name'); //usamos pluck porque es una sola columna y para obtenerlo en formato arreglo
         
         $series = [];
-        $seriesCitasAtendidas = 1;
-        $seriesCitasCanceladas = 2;
-        $series[] = $seriesCitasAtendidas;
-        $series[] = $seriesCitasCanceladas;
+        $seriesAttendedAppointments['name'] = 'Turnos atendidos';
+        $seriesAttendedAppointments['data'] = $doctors->pluck('attended_appointments_count');
+        $seriesCancelledAppintments['name'] = 'Turnos cancelados';
+        $seriesCancelledAppintments['data'] = $doctors->pluck('cancelled_appointments_count');
+        $series[] = $seriesAttendedAppointments;
+        $series[] = $seriesCancelledAppintments;
         $data['series'] = $series;
 
         return $data; //objeto json {categories: [], series[]}

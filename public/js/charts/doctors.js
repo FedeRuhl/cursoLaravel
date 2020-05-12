@@ -32,7 +32,13 @@ function fetchData(){
     .then(function(response){
         return response.json();
     })
-    .then (function(myJson){
-        console.log(myJson);
-    })
+    .then (function(data){
+        chart.xAxis[0].setCategories(data.categories);
+        chart.addSeries(data.series[0]); //Atendidas
+        chart.addSeries(data.series[1]); //Canceladas
+    });
 }
+
+$(function() {
+    fetchData();
+});
