@@ -26,14 +26,25 @@ const chart = Highcharts.chart('container', {
     series: []
 });
 
+let $start, $end;
+$start = $('#startDate');
+$end = $('#endDate');
+
 function fetchData(){
+    const startDate = $start.val();
+    const endDate = $end.val();
     // Fetch API
-    fetch('/charts/doctors/column/data')
-    .then(function(response){
-        return response.json();
-    })
-    .then (function(data){
+    const url = `/charts/doctors/column/data?start=${startDate}&end=${endDate}`;
+    fetch(url)
+    .then(response => response.json()) //parametro => return
+    .then(data => { //parametro => funcion callback
         chart.xAxis[0].setCategories(data.categories);
+        var seriesLength = chart.series.length;
+        if (seriesLength > 0){
+            for (var i = seriesLength -1; i > -1; i--){
+                chart.series[i].remove();
+            }
+        }
         chart.addSeries(data.series[0]); //Atendidas
         chart.addSeries(data.series[1]); //Canceladas
     });
@@ -41,4 +52,6 @@ function fetchData(){
 
 $(function() {
     fetchData();
+    $start.change(fetchData);
+    $end.change(fetchData);
 });

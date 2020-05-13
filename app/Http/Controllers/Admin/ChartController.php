@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Appointment;
 use App\User;
 use DB;
+use Carbon\Carbon;
 
 class ChartController extends Controller
 {
@@ -29,13 +30,27 @@ class ChartController extends Controller
     }
 
     public function doctors(){
-        return view('charts.doctors');
+        $now = Carbon::now();
+        $end = $now->format('Y-m-d');
+        $start = $now->subYear()->format('Y-m-d');
+
+        return view('charts.doctors', compact('start', 'end'));
     }
 
-    public function doctorJson(){
-        $doctors = User::doctors()
+    public function doctorJson(Request $request){
+        $start = $request->input('start');
+        $end = $request->input('end');
+
+        $doctors = User::doctors() //en ocasiones que las peticiones son muy altas, tener todas estas clausulas dentro del select no es eficiente, y desde la misma db se debería crear views o tables adecuadas para obtener solamente con select
         ->select('id', 'name')
-        ->withCount(['attendedAppointments', 'cancelledAppointments'])
+        ->withCount([
+            'attendedAppointments' => function ($query) use ($start, $end){
+                $query->whereBetween('scheduled_date', [$start, $end]);
+            },
+            'cancelledAppointments' => function ($query) use ($start, $end){
+                $query->whereBetween('scheduled_date', [$start, $end]);
+            }
+            ])
         ->orderBy('attended_appointments_count', 'desc')
         ->orderBy('cancelled_appointments_count', 'desc')
         ->take(3)

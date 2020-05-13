@@ -57,10 +57,9 @@ Route::middleware(['auth', 'admin'])->namespace('Admin')->group(function(){ //en
 
     // Charts
     Route::get('/charts/appointments/line', 'ChartController@appointments')->name('charts.appointments.line');
-    //php artisan make:controller Admin\ChartController
-
     Route::get('/charts/doctors/column', 'ChartController@doctors')->name('charts.doctors.column');
     Route::get('/charts/doctors/column/data', 'ChartController@doctorJson')->name('charts.doctors.column.data');
+    //php artisan make:controller Admin\ChartController
 });
 
 Route::middleware(['auth', 'doctor'])->namespace('Doctor')->group(function(){
