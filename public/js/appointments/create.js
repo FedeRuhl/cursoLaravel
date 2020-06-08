@@ -11,7 +11,7 @@ $(function () {
 
     $specialty.change(() =>{ //cuando el elemento de ID specialty cambie, ejecutaremos esta función
     const specialtyId = $specialty.val();
-    const url = `/specialties/${specialtyId}/doctors`; //usamos este tipo de comillas para hacer la interpolación
+    const url = `/api/specialties/${specialtyId}/doctors`; //usamos este tipo de comillas para hacer la interpolación
     $.getJSON(url, onDoctorsLoaded); //funcion de callback
     });
 
@@ -37,7 +37,7 @@ function onDoctorsLoaded(doctors){
 function loadHours(){
     const selectedDate = $date.val();
     const selectedDoctor = $doctor.val();
-    const url = `/schedule/hours?date=${selectedDate}&doctor_id=${selectedDoctor}`;
+    const url = `/api/schedule/hours?date=${selectedDate}&doctor_id=${selectedDoctor}`;
     $.getJSON(url, displayHours);
 }
 

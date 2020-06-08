@@ -81,13 +81,6 @@ Route::middleware('auth')->group(function() { //no protejemos con un middleware 
     Route::post('/appointments/{appointment}/confirm', 'AppointmentController@confirm')->name('appointment.confirm');
     
     //para crear el modelo, la migracion de la db y además el controlador ejecutamos en consola: php artisan make:model Appointment -mc
-
-
-
-    //JSON
-    Route::get('/specialties/{specialty}/doctors', 'Api\SpecialtyController@doctors')->name('specialties.doctors'); //form registro
-    //php artisan make:controller Api\SpecialtyController
-    Route::get('/schedule/hours', 'Api\ScheduleController@hours')->name('schedule.hours'); //form registro
 }); 
 
 

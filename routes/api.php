@@ -16,6 +16,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', 'AuthController@login');
 
+//JSON... public resources
+//estas 3 rutas no pertenecen ni a las rutas web ni a las rutas api, son públicas y pueden ser accedidas por cualquiera
+Route::get('/specialties', 'SpecialtyController@index')->name('specialties.index'); 
+Route::get('/specialties/{specialty}/doctors', 'SpecialtyController@doctors')->name('specialties.doctors'); //form registro
+Route::get('/schedule/hours', 'ScheduleController@hours')->name('schedule.hours'); //form registro
+
 Route::middleware('auth:api')->group(function (){
     Route::get('/user', 'UserController@show');
     Route::post('/logout', 'AuthController@logout');

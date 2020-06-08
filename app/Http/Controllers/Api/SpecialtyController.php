@@ -9,6 +9,11 @@ use App\Specialty;
 
 class SpecialtyController extends Controller
 {
+
+    public function index(){
+        return Specialty::all(['id', 'name']);        
+    }
+
     public function doctors(Specialty $specialty){
         return $specialty->users()->get([ //cuando laravel detecta que se retorna una coleccion, en este caso de usuarios, la devuelve en formato json
             'users.id', 'users.name'
