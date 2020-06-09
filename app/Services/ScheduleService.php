@@ -21,17 +21,16 @@ class ScheduleService implements ScheduleServiceInterface{
                     'morningStart', 'morningEnd', 'afternoonStart', 'afternoonEnd'
                 ]);
 
-        if(!$workDay){
-            return [];
+        if($workDay){
+            if($workDay->morningStart != null && $workDay->morningEnd != null)
+                $morningIntervals = $this->getIntervals($workDay->morningStart, $workDay->morningEnd, $doctorId, $date);
+            if($workDay->afternoonStart != null && $workDay->afternoonEnd != null)
+                $afternoonIntervals = $this->getIntervals($workDay->afternoonStart, $workDay->afternoonEnd, $doctorId, $date);
         }
-
-        $morningIntervals = [];
-        $afternoonIntervals = [];
-
-        if($workDay->morningStart != null && $workDay->morningEnd != null)
-            $morningIntervals = $this->getIntervals($workDay->morningStart, $workDay->morningEnd, $doctorId, $date);
-        if($workDay->afternoonStart != null && $workDay->afternoonEnd != null)
-            $afternoonIntervals = $this->getIntervals($workDay->afternoonStart, $workDay->afternoonEnd, $doctorId, $date);
+        else{
+            $morningIntervals = [];
+            $afternoonIntervals = [];
+        }
 
         $data = [];
         $data['morning'] = $morningIntervals;
