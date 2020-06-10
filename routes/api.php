@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+Route::post('/login', 'AuthController@login');
 //JSON... public resources
 //estas 3 rutas no pertenecen ni a las rutas web ni a las rutas api, son públicas y pueden ser accedidas por cualquiera
 Route::get('/specialties', 'SpecialtyController@index')->name('specialties.index'); 
@@ -22,7 +22,6 @@ Route::get('/schedule/hours', 'ScheduleController@hours')->name('schedule.hours'
 
 Route::middleware('auth:api')->group(function (){
     Route::get('/user', 'UserController@show');
-    Route::post('/login', 'AuthController@login');
     Route::post('/logout', 'AuthController@logout');
 });
 
