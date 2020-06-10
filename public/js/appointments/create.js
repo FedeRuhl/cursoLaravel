@@ -44,7 +44,7 @@ function loadHours(){
 function displayHours(data){
     let htmlHours = '';
     $iRadio = 0;
-    if(data.length == 0){
+    if(data.morning.length === 0 && data.afternoon.length === 0 || !data.morning && !data.afternoon){
         $hours.html(noHoursAlert);
         return;
     }
