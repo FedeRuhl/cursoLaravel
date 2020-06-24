@@ -7,6 +7,7 @@ use App\Specialty;
 use App\Interfaces\ScheduleServiceInterface;
 use App\Appointment;
 use App\CancelledAppointment;
+use App\Http\Requests\StoreAppointment;
 use Validator;
 use Carbon\Carbon;
 
@@ -72,54 +73,13 @@ class AppointmentController extends Controller
         return view('appointments.create', compact('specialties', 'doctors', 'intervals'));
     }
 
-    public function store(Request $request, ScheduleServiceInterface $scheduleService){
-
-        $rules = [
-            'description' => 'required',
-            'specialty_id' => 'exists:specialties,id',
-            'doctor_id' => 'required|exists:users,id',
-            'scheduled_time' => 'required',
-            'scheduled_date' => 'required'
-        ];
-
-        $messages = [
-            'scheduled_time.required' => 'Por favor, seleccione una hora válida para reservar su turno.',
-            'scheduled_date.required' => 'Por favor, seleccione una fecha disponible.'
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages); //ya que con validate no es suficiente
-
-        $validator->after(function ($validator) use ($request, $scheduleService) { //la funcion anonima no reconoce la variable si no se pone 'use'
-            $date = $request->input('scheduled_date');
-            $doctorId = $request->input('doctor_id');
-            $scheduledTime = $request->input('scheduled_time');
-            $start = new Carbon($scheduledTime);
-
-            if($scheduleService->isAvailableInterval($date, $doctorId, $start) == false){
-                $validator->errors()
-                          ->add('available_time', 'La hora seleccionada se acaba de reservar por otro paciente.');
-            }
-        });
-
-        if($validator->fails()){
-            return back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
-
-        $data = $request->only([
-            'description',
-            'specialty_id',
-            'doctor_id',
-            'patient_id',
-            'scheduled_date',
-            'scheduled_time',
-            'type'
-        ]);
-        $data['patient_id'] = auth()->id();
-        Appointment::create($data);
-        
-        $notification = "El turno se ha reservado correctamente.";
+    public function store(StoreAppointment $request){ //storeAppointment lo creamos nosotros como form request
+        $created = Appointment::createForPatient($request, auth()->id());
+        if ($created)
+            $notification = "El turno se ha reservado correctamente.";
+        else
+            $notification = "Ocurrió un problema al registrar el turno.";
+    
         return back()->with(compact('notification'));
     }
 

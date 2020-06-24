@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class Appointment extends Model
 {
@@ -55,5 +56,20 @@ class Appointment extends Model
 
     public function patient(){
         return $this->belongsTo(User::class);
+    }
+
+    static public function createForPatient(Request $request, $patientId){
+        $data = $request->only([
+            'description',
+            'specialty_id',
+            'doctor_id',
+            'patient_id',
+            'scheduled_date',
+            'scheduled_time',
+            'type'
+        ]);
+        $data['patient_id'] = $patientId;
+
+        return self::create($data);
     }
 }
