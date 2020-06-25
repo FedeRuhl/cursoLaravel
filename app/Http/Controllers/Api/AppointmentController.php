@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
 use App\Http\Requests\StoreAppointment;
+use App\Appointment;
 
 class AppointmentController extends Controller
 {
