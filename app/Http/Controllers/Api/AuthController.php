@@ -66,14 +66,13 @@ class AuthController extends Controller
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
-        $token->save();
+        $token->save(); //esto no me termina de cerrar, pq creamos el jwt en 2 lugares
 
         return response()->json([
             'user' => $user,
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
-            'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString(),
-            'message' => 'Successfully created user!'
+            'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString()
         ], 201);
 
         /*return response()->json([
