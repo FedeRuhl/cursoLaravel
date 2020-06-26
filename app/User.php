@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -27,6 +28,12 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password', 'remember_token', 'pivot', 'email_verified_at', 'created_at', 'updated_at'
+    ];
+
+    public static $rules = [ //poniendo static no es necesario crear una instancia de user para usar las reglas
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+        'password' => ['required', 'string', 'min:8', 'confirmed']
     ];
 
     /**
@@ -65,5 +72,14 @@ class User extends Authenticatable
 
     public function AsPatientAppointments(){
         return $this->hasMany(Appointment::class, 'patient_id');
+    }
+
+    public static function createPatient(array $data){
+        return self::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role' => 'patient'
+        ]);
     }
 }
