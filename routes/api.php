@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', 'AuthController@login');
 Route::post('/register', 'AuthController@register');
 
+
 //JSON... public resources
 //estas 3 rutas no pertenecen ni a las rutas web ni a las rutas api, son públicas y pueden ser accedidas por cualquiera
 Route::get('/specialties', 'SpecialtyController@index')->name('specialties.index'); 
@@ -29,5 +30,8 @@ Route::middleware('auth:api')->group(function (){
     //appointments
     Route::get('/appointments', 'AppointmentController@index');
     Route::post('/appointments', 'AppointmentController@store');
+
+    //fcm
+    Route::post('/fcm/token', 'FirebaseController@postToken');
 });
 
