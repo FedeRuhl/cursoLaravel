@@ -60,6 +60,9 @@ Route::middleware(['auth', 'admin'])->namespace('Admin')->group(function(){ //en
     Route::get('/charts/doctors/column', 'ChartController@doctors')->name('charts.doctors.column');
     Route::get('/charts/doctors/column/data', 'ChartController@doctorJson')->name('charts.doctors.column.data');
     //php artisan make:controller Admin\ChartController
+
+    //FCM
+    Route::post('/fcm/send', 'FirebaseController@sendAll');
 });
 
 Route::middleware(['auth', 'doctor'])->namespace('Doctor')->group(function(){
