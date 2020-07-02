@@ -52,38 +52,35 @@ class SendNotifications extends Command
         ];
 
         $appointmentsTomorrow = $this->getAppointments24Hours($now->copy());
-
-        foreach($appointmentsTomorrow as $appointment){
-            $appointment->patient->sendFCM('No olvides tu turno mañana a esta hora.');
-            $this->info('Mensaje FCM enviado 24 horas antes al paciente con ID: ' . $appointment->patient_id);
-        }
-
         $this->table($headers, $appointmentsTomorrow->toArray());
 
+        foreach($appointmentsTomorrow as $appointment){
+            $appointment->patient->sendFCM('No olvides tu turno mañana a esta misma hora.');
+            $this->info('Mensaje FCM enviado 24 horas antes al paciente con ID: ' . $appointment->patient_id);
+        }
+        
+
         $appointmentsNextHour = $this->getAppointmentsNextHour($now->copy());
+        $this->table($headers, $appointmentsNextHour->toArray());
 
         foreach($appointmentsNextHour as $appointment){
-            $appointment->patient->sendFCM('Tienen un turno en una hora. Te esperamos.');
+            $appointment->patient->sendFCM('Tienes un turno dentro de una hora. Te esperamos.');
             $this->info('Mensaje FCM enviado 1 hora antes al paciente con ID: ' . $appointment->patient_id);
         }
-
-        $this->table($headers, $appointmentsNextHour->toArray());
 
     }
 
     private function getAppointments24Hours($now){
         return Appointment::where('status', 'Confirmado')
             ->where('scheduled_date', $now->addDay()->toDateString())
-            ->where('scheduled_time', '>=' ,$now->subMinutes(3)->toTimeString()) //usamos copy para no alterar el objeto, sino una copia del mismo
-            ->where('scheduled_time', '<' ,$now->addMinutes(5)->toTimeString()) //sumamos y restamos minutos para que sea aproximadamente a la misma hora
+            ->where('scheduled_time', $now->toTimeString())
             ->get();
     }
 
     private function getAppointmentsNextHour($now){
         return Appointment::where('status', 'Confirmado')
             ->where('scheduled_date', $now->addHour()->toDateString())
-            ->where('scheduled_time', '>=' ,$now->subMinutes(3)->toTimeString()) //usamos copy para no alterar el objeto, sino una copia del mismo
-            ->where('scheduled_time', '<' ,$now->addMinutes(5)->toTimeString()) //sumamos y restamos minutos para que sea aproximadamente a la misma hora
+            ->where('scheduled_time', $now->toTimeString())
             ->get();
     }
 }
