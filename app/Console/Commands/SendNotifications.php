@@ -51,7 +51,7 @@ class SendNotifications extends Command
             'patient_id'
         ];
 
-        $appointmentsTomorrow = $this->getAppointments24Hours($now);
+        $appointmentsTomorrow = $this->getAppointments24Hours($now->copy);
 
         foreach($appointmentsTomorrow as $appointment){
             $appointment->patient->sendFCM('No olvides tu turno mañana a esta hora.');
@@ -60,7 +60,7 @@ class SendNotifications extends Command
 
         $this->table($headers, $appointmentsTomorrow);
 
-        $appointmentsNextHour = $this->getAppointmentsNextHour($now);
+        $appointmentsNextHour = $this->getAppointmentsNextHour($now->copy);
 
         foreach($appointmentsNextHour as $appointment){
             $appointment->patient->sendFCM('Tienen un turno en una hora. Te esperamos.');
