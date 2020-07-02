@@ -59,7 +59,7 @@ class SendNotifications extends Command
             $this->info('Mensaje FCM enviado 24 horas antes al paciente con ID: ' . $appointment->patient_id);
         }
         
-
+        
         $appointmentsNextHour = $this->getAppointmentsNextHour($now->copy());
         $this->table($headers, $appointmentsNextHour->toArray());
 
@@ -73,14 +73,16 @@ class SendNotifications extends Command
     private function getAppointments24Hours($now){
         return Appointment::where('status', 'Confirmado')
             ->where('scheduled_date', $now->addDay()->toDateString())
-            ->where('scheduled_time', $now->toTimeString())
+            ->where('scheduled_time', '>=' ,$now->subMinutes(1)->toTimeString()) //usamos copy para no alterar el objeto, sino una copia del mismo
+            ->where('scheduled_time', '<' ,$now->addMinutes(2)->toTimeString()) //sumamos y restamos minutos para que sea aproximadamente a la misma hora
             ->get();
     }
 
     private function getAppointmentsNextHour($now){
         return Appointment::where('status', 'Confirmado')
             ->where('scheduled_date', $now->addHour()->toDateString())
-            ->where('scheduled_time', $now->toTimeString())
+            ->where('scheduled_time', '>=' ,$now->subMinutes(1)->toTimeString()) //usamos copy para no alterar el objeto, sino una copia del mismo
+            ->where('scheduled_time', '<' ,$now->addMinutes(2)->toTimeString()) //sumamos y restamos minutos para que sea aproximadamente a la misma hora
             ->get();
     }
 }
