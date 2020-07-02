@@ -51,7 +51,7 @@ class SendNotifications extends Command
             'patient_id'
         ];
 
-        $appointmentsTomorrow = $this->getAppointments24Hours($now->copy);
+        $appointmentsTomorrow = $this->getAppointments24Hours($now->copy());
 
         foreach($appointmentsTomorrow as $appointment){
             $appointment->patient->sendFCM('No olvides tu turno mañana a esta hora.');
@@ -74,16 +74,16 @@ class SendNotifications extends Command
     private function getAppointments24Hours($now){
         return Appointment::where('status', 'Confirmado')
             ->where('scheduled_date', $now->addDay()->toDateString())
-            ->where('scheduled_time', '>=' ,$now->copy()->subMinutes(3)->toTimeString()) //usamos copy para no alterar el objeto, sino una copia del mismo
-            ->where('scheduled_time', '<' ,$now->copy()->addMinutes(2)->toTimeString()) //sumamos y restamos minutos para que sea aproximadamente a la misma hora
+            ->where('scheduled_time', '>=' ,$now->subMinutes(3)->toTimeString()) //usamos copy para no alterar el objeto, sino una copia del mismo
+            ->where('scheduled_time', '<' ,$now->addMinutes(5)->toTimeString()) //sumamos y restamos minutos para que sea aproximadamente a la misma hora
             ->get();
     }
 
     private function getAppointmentsNextHour($now){
         return Appointment::where('status', 'Confirmado')
             ->where('scheduled_date', $now->addHour()->toDateString())
-            ->where('scheduled_time', '>=' ,$now->copy()->subMinutes(3)->toTimeString()) //usamos copy para no alterar el objeto, sino una copia del mismo
-            ->where('scheduled_time', '<' ,$now->copy()->addMinutes(2)->toTimeString()) //sumamos y restamos minutos para que sea aproximadamente a la misma hora
+            ->where('scheduled_time', '>=' ,$now->subMinutes(3)->toTimeString()) //usamos copy para no alterar el objeto, sino una copia del mismo
+            ->where('scheduled_time', '<' ,$now->addMinutes(5)->toTimeString()) //sumamos y restamos minutos para que sea aproximadamente a la misma hora
             ->get();
     }
 }
