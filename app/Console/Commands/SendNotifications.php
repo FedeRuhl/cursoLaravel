@@ -40,9 +40,16 @@ class SendNotifications extends Command
      */
     public function handle()
     {
-        $this->info('Buscando turnos médicos con estado Confirmado en las próximas 24 horas.');
+        $this->info('Buscando turnos médicos con estado confirmado.');
 
         $now = Carbon::now();
+
+        $headers = [
+            'id',
+            'scheduled_date',
+            'scheduled_time',
+            'patient_id'
+        ];
 
         $appointmentsTomorrow = $this->getAppointments24Hours($now);
 
@@ -51,12 +58,16 @@ class SendNotifications extends Command
             $this->info('Mensaje FCM enviado 24 horas antes al paciente con ID: ' . $appointment->patient_id);
         }
 
+        $this->table($headers, $appointmentsTomorrow);
+
         $appointmentsNextHour = $this->getAppointmentsNextHour($now);
 
         foreach($appointmentsNextHour as $appointment){
             $appointment->patient->sendFCM('Tienen un turno en una hora. Te esperamos.');
             $this->info('Mensaje FCM enviado 1 hora antes al paciente con ID: ' . $appointment->patient_id);
         }
+
+        $this->table($headers, $appointmentsNextHour);
 
     }
 
