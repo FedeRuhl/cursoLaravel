@@ -111,7 +111,10 @@ class AppointmentController extends Controller
             $appointment->cancellation()->save($cancellation);
         }
         $appointment->status = 'Cancelado';
-        $appointment->save(); //update
+        $saved = $appointment->save(); //update
+
+        if ($saved)
+            $appointment->patient->sendFCM('Su turno se ha cancelado.');
 
         $notification = "La cita se ha cancelado correctamente";
         
@@ -128,7 +131,10 @@ class AppointmentController extends Controller
 
     public function confirm(Appointment $appointment){
         $appointment->status = 'Confirmado';
-        $appointment->save(); //update
+        $saved = $appointment->save(); //update
+
+        if ($saved)
+            $appointment->patient->sendFCM('Su turno se ha confimado!');
 
         $notification = "La cita se ha cancelado correctamente";
         if (auth()->user()->role == 'patient'){

@@ -82,4 +82,18 @@ class User extends Authenticatable
             'role' => 'patient'
         ]);
     }
+
+    public function sendFCM($message){
+        return fcm()
+        ->to([
+            $this->device_token
+        ]) // $recipients must an array
+        ->priority('high')
+        ->timeToLive(0)
+        ->notification([
+            'title' => config('app.name'),
+            'body' => $message
+        ])
+        ->send();
+    }
 }
