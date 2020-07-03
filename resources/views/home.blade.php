@@ -76,3 +76,10 @@
 </div>
 
 @endsection
+
+@section('scripts')
+  <script>
+    const appointmentsByDay = @json($appointmentsByDay); //blade convierte la variable php en json
+  </script>
+  <script src="{{ asset('js/charts/home.js') }}"></script>
+@endsection
