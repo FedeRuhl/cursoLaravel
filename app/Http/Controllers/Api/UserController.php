@@ -15,9 +15,9 @@ class UserController extends Controller
 
     public function update(Request $request){
         $user = Auth::guard('api')->user();
-        $user->name = $request->name; //$request->input('name')
-        $user->name = $request->phone;
-        $user->name = $request->address;
+        $user->name = $request->input('name'); //$request->name
+        $user->phone = $request->input('phone');
+        $user->address = $request->input('address');
         $user->save();
     }
 }
