@@ -67,13 +67,19 @@ Route::middleware(['auth', 'admin'])->namespace('Admin')->group(function(){ //en
 
 Route::middleware(['auth', 'doctor'])->namespace('Doctor')->group(function(){
     Route::get('/schedule', 'ScheduleController@edit')->name('schedule.edit');
-    //en consola escribimos php artisan make:controller Doctor\ScheduleController
     Route::post('/schedule', 'ScheduleController@store')->name('schedule.store');
+    //en consola escribimos php artisan make:controller Doctor\ScheduleController
 });
 
 Route::middleware('auth')->group(function() { //no protejemos con un middleware especial para que un admin/medico puede reservar citas
-    Route::get('/appointments/create', 'AppointmentController@create')->name('appointment.create');
-    Route::post('/appointments', 'AppointmentController@store')->name('appointment.store');
+
+    Route::get('/profile', 'UserController@edit')->name('profile.edit');
+    Route::post('/profile', 'UserController@update')->name('profile.update');
+
+    Route::middleware('phone')->group(function() {
+        Route::get('/appointments/create', 'AppointmentController@create')->name('appointment.create');
+        Route::post('/appointments', 'AppointmentController@store')->name('appointment.store');
+    });
 
     Route::get('/patient/appointments', 'AppointmentController@patientList')->name('appointment.patient');
     Route::get('/doctor/appointments', 'AppointmentController@doctorList')->name('appointment.doctor');
